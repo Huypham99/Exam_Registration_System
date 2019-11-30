@@ -30,25 +30,6 @@ export const StyledLabel = styled.label`
   }
 `;
 
-export const StyledPrefixLabel = styled.label`
-  display: flex;
-  width: 100%;
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  color: ${theme.text.placeholder};
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  > input {
-    margin-left: 2px;
-  }
-  &:hover > input {
-    border-color: ${props =>
-        props.disabled ? theme.bg.inactive : theme.text.alt};
-    transition: ${Transition.hover.on};
-  }
-`;
-
 export const StyledInput = styled.input`
   flex: 1 0 auto;
   background: ${props =>
@@ -94,62 +75,6 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const StyledTextArea = styled(Textarea)`
-  flex: 1 0 auto;
-  width: 100%;
-  background: ${theme.bg.default};
-  font-weight: 500;
-  font-size: 14px;
-  border: 2px solid ${theme.bg.inactive};
-  border-radius: 4px;
-  padding: 12px;
-  margin-top: 2px;
-  box-shadow: none;
-  transition: ${Transition.hover.off};
-  &::placeholder {
-    color: ${theme.text.placeholder};
-  }
-  &::-webkit-input-placeholder {
-    color: ${theme.text.placeholder};
-  }
-  &:-moz-placeholder {
-    color: ${theme.text.placeholder};
-  }
-  &:-ms-input-placeholder {
-    color: ${theme.text.placeholder};
-  }
-  &:focus {
-    border-color: ${theme.brand.default};
-    transition: ${Transition.hover.on};
-  }
-`;
-
-export const StyledUnderlineInput = styled.input`
-  font-size: inherit;
-  font-weight: inherit;
-  color: ${props =>
-        props.disabled ? theme.text.alt : theme.text.default};
-  border-bottom: ${props =>
-        props.disabled
-            ? '2px solid transparent'
-            : `2px solid ${theme.bg.inactive}`};
-  width: 50%;
-  transition: ${Transition.hover.off};
-  &:hover {
-    border-color: ${props => (props.disabled ? 'transparent' : 'inherit')};
-    transition: ${Transition.hover.on};
-  }
-  &:focus {
-    border-color: ${theme.brand.default};
-    transition: ${Transition.hover.on};
-  }
-`;
-
-export const StyledHiddenInput = styled.input`
-  visibility: hidden;
-  width: 0;
-  height: 0;
-`;
 
 export const StyledError = styled.div`
   display: flex;

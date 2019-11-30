@@ -1,12 +1,8 @@
 import * as React from 'react';
-// import Icon from 'src/components/icon';
 
 import {
   StyledLabel,
-  StyledPrefixLabel,
   StyledInput,
-  StyledTextArea,
-  StyledUnderlineInput,
   StyledError,
   StyledSuccess,
 } from './style';
@@ -29,43 +25,6 @@ export const Input = (props) => {
     </StyledLabel>
   );
 };
-
-
-export const TextArea = (props: InputProps) => {
-  return (
-    <StyledLabel>
-      {props.children}
-      <StyledTextArea
-        id={props.id}
-        placeholder={props.placeholder}
-        defaultValue={props.defaultValue}
-        onChange={props.onChange}
-        autoFocus={props.autoFocus}
-        data-cy={props.dataCy}
-      />
-    </StyledLabel>
-  );
-};
-
-export class UnderlineInput extends React.Component<InputProps> {
-  render() {
-    return (
-      <StyledPrefixLabel disabled={this.props.disabled}>
-        {this.props.children}
-        <StyledUnderlineInput
-          type="text"
-          id={this.props.id}
-          placeholder={this.props.placeholder}
-          value={this.props.value || this.props.defaultValue}
-          onChange={this.props.onChange}
-          autoFocus={this.props.autoFocus}
-          disabled={this.props.disabled}
-          data-cy={this.props.dataCy}
-        />
-      </StyledPrefixLabel>
-    );
-  }
-}
 
 export const Error = (props: Object) => {
   const { children, ...rest } = props;

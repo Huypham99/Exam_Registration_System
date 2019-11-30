@@ -19,7 +19,7 @@ const ExcelUploadForm = (props) => {
 
         formData.append('file', file);
 
-        axios.post(`http://localhost:4000/${api}`, formData)
+        axios.post(`http://localhost:4000/${api}`, formData).catch((err) => console.log('error: ', err))
 
         setDisplay(false)
     }
