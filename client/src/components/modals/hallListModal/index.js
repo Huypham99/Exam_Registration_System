@@ -16,7 +16,7 @@ import { withCurrentUser } from '../../withCurrentUser'
 const HallListModal = (props) => {
 
     const isOpen = useSelector(state => state.modals.isOpen)
-    const id = useSelector(state => state.shift.shiftId)
+    const id = useSelector(state => state.shift.id)
     const studentId = useSelector(state => state.id)
     const { currentUser } = props
 

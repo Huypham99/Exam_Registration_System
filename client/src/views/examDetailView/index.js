@@ -9,7 +9,7 @@ import { openModal } from '../../actions/modals';
 import { setExamId } from '../../actions/examInfor';
 import { withRouter } from 'react-router-dom'
 import { PrimaryButton } from '../../components/button'
-import { setShiftId } from '../../actions/shiftInfor'
+import { setShiftId, setShiftInfor } from '../../actions/shiftInfor'
 import { from } from 'zen-observable';
 
 const ExamDetailStudent = (props) => {
@@ -71,7 +71,14 @@ const ExamDetailStudent = (props) => {
             Cell: (props) => (
                 <PrimaryButton onClick={() => (
                     dispatch(openModal('HALL_LIST_MODAL')),
-                    dispatch(setShiftId(props.original.id))
+                    dispatch(setShiftInfor(
+                        props.original.id,
+                        props.original.time,
+                        props.original.date,
+                        props.original.dayOfWeek,
+                        props.original.module.moduleId,
+                        props.original.module.name
+                    ))
                 )}>
                     Xem
                 </PrimaryButton>

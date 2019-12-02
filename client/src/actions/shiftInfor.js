@@ -5,3 +5,15 @@ export const setShiftId = (shiftId) => {
         shiftId: shiftId,
     };
 };
+
+export const setShiftInfor = (id, time, date, dayOfWeek, moduleId, moduleName) => {
+    return {
+        type: 'SET_SHIFT_INFOR',
+        id,
+        time,
+        date,
+        dayOfWeek,
+        moduleId,
+        moduleName
+    }
+}

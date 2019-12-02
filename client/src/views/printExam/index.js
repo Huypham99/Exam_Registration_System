@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { SingleColumnGrid } from '../../components/layout'
 import { useQuery } from '@apollo/react-hooks'
 import { getStudentShiftByStudentIdQuery } from '../../graphql/queries/student_shift/getStudentShift'
@@ -8,6 +8,8 @@ import { Main, Table, Td, Th, Title, TdCenter, Divider, IconWrapper } from './st
 import { TitleWrapper, Container } from '../../components/table/style'
 import { PrimaryButton } from '../../components/button'
 import Icon from '../../components/icon'
+import ReactToPrint from "react-to-print";
+
 const PrintExam = () => {
 
     const studentId = useSelector(state => state.id)
@@ -15,17 +17,24 @@ const PrintExam = () => {
     const { data, loading } = useQuery(getStudentShiftByStudentIdQuery, { variables: { studentId: studentId } });
     const { data: user } = useQuery(getUserByIdQuery, { variables: { id: studentId } });
 
+    const componentRef = useRef();
+
     return (
         <SingleColumnGrid>
             <Container>
                 <TitleWrapper>
                     <h1>In đăng kí thi</h1>
-                    <PrimaryButton>
-                        <IconWrapper><Icon glyph='printer' size='20' /></IconWrapper>
-                        In kết quả
-                    </PrimaryButton>
+                    <ReactToPrint
+                        trigger={() => (
+                            <PrimaryButton>
+                                <IconWrapper><Icon glyph='printer' size='20' /></IconWrapper>
+                                In kết quả
+                            </PrimaryButton>
+                        )}
+                        content={() => componentRef.current}
+                    />
                 </TitleWrapper>
-                <Main>
+                <Main ref={componentRef}>
                     <Table>
                         <tr>
                             <TdCenter>ĐẠI HỌC QUỐC GIA HÀ NỘI</TdCenter>
@@ -75,12 +84,12 @@ const PrintExam = () => {
                         {data && data.getStudentShiftByStudentId.map((student_shift, index) => (
                             <tr>
                                 <Td>{index + 1}</Td>
-                                <Td>{student_shift.shiftHalls.shiftDetail.time}</Td>
-                                <Td>{student_shift.shiftHalls.shiftDetail.dayOfWeek}</Td>
-                                <Td>{student_shift.shiftHalls.shiftDetail.date}</Td>
-                                <Td>{student_shift.shiftHalls.shiftDetail.module.moduleId}</Td>
-                                <Td>{student_shift.shiftHalls.shiftDetail.module.name}</Td>
-                                <Td>{student_shift.shiftHalls.hallDetail.name}</Td>
+                                <Td>{student_shift.shiftHall.shiftDetail.time}</Td>
+                                <Td>{student_shift.shiftHall.shiftDetail.dayOfWeek}</Td>
+                                <Td>{student_shift.shiftHall.shiftDetail.date}</Td>
+                                <Td>{student_shift.shiftHall.shiftDetail.module.moduleId}</Td>
+                                <Td>{student_shift.shiftHall.shiftDetail.module.name}</Td>
+                                <Td>{student_shift.shiftHall.hallDetail.name}</Td>
                             </tr>
                         ))}
                     </Table>

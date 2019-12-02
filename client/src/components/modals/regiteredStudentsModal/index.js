@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux'
-import { closeModal } from '../../../actions/modals';
+import { openModal } from '../../../actions/modals';
 import { modalStyles, Wrapper, Actions } from '../style'
 import ModalContainer from '../modalContainer'
 import { PrimaryButton, WarnButton } from '../../button/index'
@@ -22,10 +22,10 @@ const RegisteredStudentModal = (props) => {
 
     const dispatch = useDispatch()
 
-
     const style = modalStyles();
 
-    const close = () => dispatch(closeModal());
+    const back = () => dispatch(openModal('HALL_LIST_MODAL'))
+    const handlePrint = () => dispatch(openModal('PRINT_REG_STUDENTS_MODAL'))
 
     return (
         <Modal
@@ -44,6 +44,7 @@ const RegisteredStudentModal = (props) => {
                                 <Th>Email</Th>
                                 <Th>Ngày sinh</Th>
                                 <Th>Mã số sinh viên</Th>
+                                <Th>Khóa</Th>
                             </tr>
                         </thead>
                         {students.map(student => (
@@ -53,13 +54,15 @@ const RegisteredStudentModal = (props) => {
                                     <Td>{student.email}</Td>
                                     <Td>{student.dob}</Td>
                                     <Td>{student.studentId}</Td>
+                                    <Td>{student.schoolYear}</Td>
                                 </tr>
                             </tbody>
                         ))}
                     </Table>
                 </Wrapper>
                 <Actions>
-                    <WarnButton onClick={() => close()}>Hủy</WarnButton>
+                    <WarnButton onClick={() => back()}>Quay lại</WarnButton>
+                    <PrimaryButton onClick={() => handlePrint()}>Xuất danh sách</PrimaryButton>
                 </Actions>
             </ModalContainer>
         </Modal>

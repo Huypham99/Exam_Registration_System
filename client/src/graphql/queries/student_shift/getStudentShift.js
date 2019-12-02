@@ -32,6 +32,7 @@ query($shiftHallId: String){
       email
       dob
       studentId
+      schoolYear
     }
 	}
 }

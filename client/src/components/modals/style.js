@@ -3,7 +3,7 @@ import theme from '../../shared/theme/index';
 import { FlexRow } from '../../components/globals'
 import Icon from '../../components/icon'
 
-export const modalStyles = (maxWidth = 500) => {
+export const modalStyles = (minWidth = 350, maxWidth = 700) => {
   return {
     // dark background behind all modals
     overlay: {
@@ -31,6 +31,7 @@ export const modalStyles = (maxWidth = 500) => {
       padding: '0',
       zIndex: 9999,
       width: '100%',
+      minWidth: `${minWidth}px`,
       maxWidth: `${maxWidth}px`,
       top: 'auto',
       bottom: 'auto',
