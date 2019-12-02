@@ -12,6 +12,7 @@ import moduleInforReducer from './moduleInforReducer'
 import eligibleReducer from './eligibleReducer'
 import hallInforReducer from './hallInforReducer'
 import toastReducer from './toastReducer'
+import studentsListReducer from './studentsListReducer'
 
 const allReducers = combineReducers({
     id: idReducer,
@@ -26,7 +27,8 @@ const allReducers = combineReducers({
     shiftHall: shiftHallInforReducer,
     isEligible: eligibleReducer,
     hall: hallInforReducer,
-    toasts: toastReducer
+    toasts: toastReducer,
+    studentsList: studentsListReducer
 })
 export default allReducers;
 

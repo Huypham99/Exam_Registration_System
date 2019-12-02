@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux'
-import { closeModal } from '../../../actions/modals';
+import { closeModal, openModal } from '../../../actions/modals'
+import { setStudentsList } from '../../../actions/studentsList'
 import { modalStyles, Wrapper, Actions } from '../style'
 import ModalContainer from '../modalContainer'
 import { PrimaryButton, WarnButton } from '../../button/index'
@@ -9,7 +10,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import { getShiftByIdQuery } from '../../../graphql/queries/shift/getShift'
 import { getStudentShiftByShiftHallIdQuery, getStudentShiftByStudentIdQuery } from '../../../graphql/queries/student_shift/getStudentShift'
 import { Query } from 'react-apollo'
-import { Table, Td, Th, Tr, IconWrapper } from './style'
+import { Table, Td, Th, IconWrapper } from './style'
 import { withCurrentUser } from '../../withCurrentUser'
 
 const HallListModal = (props) => {
@@ -19,9 +20,10 @@ const HallListModal = (props) => {
     const studentId = useSelector(state => state.id)
     const { currentUser } = props
 
-
-    const [registeredUsers, setRegistered] = useState(null)
     const [selected, setSelected] = useState(false)
+
+    // Array stores list of registered student of each hall
+    const students = []
 
     const dispatch = useDispatch()
 
@@ -42,7 +44,7 @@ const HallListModal = (props) => {
             closeTimeoutMS={330}
             style={style}
         >
-            <ModalContainer title='Chọn phòng thi'>
+            <ModalContainer title='Danh sách phòng thi'>
                 <Wrapper>
                     <Table>
                         <thead>
@@ -50,28 +52,37 @@ const HallListModal = (props) => {
                                 <Th>Giang đường</Th>
                                 <Th>Sức chứa</Th>
                                 <Th>Đã đăng kí</Th>
+                                <Th>Danh sách sinh viên</Th>
                             </tr>
                         </thead>
                         {shift && shift.getShiftById.halls.map(hall => (
                             <tbody>
-                                <Tr
-                                    capacity={hall.hallDetail.capacity}
-                                    registered={registeredUsers}
-                                    selected={hallIdList.includes(hall.hallDetail.id)}
-                                >
-                                    <Td>{hall.hallDetail.name}</Td>
-                                    <Td>{hall.hallDetail.capacity}</Td>
-                                    <Query query={getStudentShiftByShiftHallIdQuery} variables={{ shiftHallId: hall.id }}>
-                                        {({ data }) => {
-                                            setRegistered(data && data.getStudentShiftByShiftHallId.length)
-                                            return <Td>{data && data.getStudentShiftByShiftHallId.length}</Td>
-                                        }}
-                                    </Query>
-                                </Tr>
+                                <Query query={getStudentShiftByShiftHallIdQuery} variables={{ shiftHallId: hall.id }}>
+                                    {({ data }) => (
+                                        data && data.getStudentShiftByShiftHallId.map(data => students.push(data.student)),
+                                        <tr>
+                                            <Td>{hall.hallDetail.name}</Td>
+                                            <Td>{hall.hallDetail.capacity}</Td>
+                                            <Td>{data && data.getStudentShiftByShiftHallId.length}</Td>
+                                            <Td>
+                                                <IconWrapper>
+                                                    <PrimaryButton onClick={() => {
+                                                        dispatch(setStudentsList(students))
+                                                        dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
+                                                    }}
+                                                    >Xem</PrimaryButton>
+                                                </IconWrapper>
+                                            </Td>
+                                        </tr>
+                                    )}
+                                </Query>
                             </tbody>
                         ))}
                     </Table>
                 </Wrapper>
+                <Actions>
+                    <WarnButton onClick={() => close()}>Hủy</WarnButton>
+                </Actions>
             </ModalContainer>
         </Modal>
     );

@@ -8,6 +8,9 @@ import { useDispatch } from 'react-redux'
 import { openModal } from '../../actions/modals';
 import { setExamId } from '../../actions/examInfor';
 import { withRouter } from 'react-router-dom'
+import { PrimaryButton } from '../../components/button'
+import { setShiftId } from '../../actions/shiftInfor'
+import { from } from 'zen-observable';
 
 const ExamDetailStudent = (props) => {
 
@@ -60,34 +63,22 @@ const ExamDetailStudent = (props) => {
             accessor: d => d.module && d.module.name,
             style: style,
             headerStyle: headerStyle,
-            width: 400,
+            width: 500,
         },
         {
             id: 'hall',
             Header: 'Phòng thi',
             Cell: (props) => (
-                <div>
-                    {props.original.halls.map(hall => (
-                        <p>{hall.hallDetail.name}</p>
-                    ))}
-                </div>
+                <PrimaryButton onClick={() => (
+                    dispatch(openModal('HALL_LIST_MODAL')),
+                    dispatch(setShiftId(props.original.id))
+                )}>
+                    Xem
+                </PrimaryButton>
             ),
             style: style,
             headerStyle: headerStyle,
-            maxWidth: 130,
-        }, {
-            id: 'Sức chứ',
-            Header: 'Sức Chứa',
-            Cell: (props) => (
-                <div>
-                    {props.original.halls.map(hall => (
-                        <p>{hall.hallDetail.capacity}</p>
-                    ))}
-                </div>
-            ),
-            style: style,
-            headerStyle: headerStyle,
-            minWidth: 70,
+            minWidth: 130,
         }]
 
     return (

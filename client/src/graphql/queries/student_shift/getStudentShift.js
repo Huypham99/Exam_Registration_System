@@ -5,7 +5,7 @@ import shiftInforFragment from '../../fragments/shift/shiftInfor'
 export const getStudentShiftByStudentIdQuery = gql`
 query($studentId: String){
   getStudentShiftByStudentId(studentId: $studentId){
-    shiftHalls{
+    shiftHall{
       shiftDetail{
         ...shiftInfor
         module{
@@ -27,6 +27,12 @@ export const getStudentShiftByShiftHallIdQuery = gql`
 query($shiftHallId: String){
   getStudentShiftByShiftHallId(shiftHallId: $shiftHallId){
     id
+    student{
+      name
+      email
+      dob
+      studentId
+    }
 	}
 }
 `

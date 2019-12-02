@@ -108,7 +108,7 @@ const SelectShiftHallModal = (props) => {
                                     </Query>
                                     {
                                         student_shift && student_shift.getStudentShiftByStudentId.map(data => {
-                                            hallIdList.push(data.shiftHalls.hallDetail.id)
+                                            hallIdList.push(data.shiftHall.hallDetail.id)
                                         })
                                     }
                                     <Td>

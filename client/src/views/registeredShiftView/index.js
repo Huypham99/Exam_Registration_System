@@ -23,7 +23,7 @@ const RegisteredShifts = (props) => {
         {
             id: 'Time',
             Header: 'Thời gian',
-            accessor: d => d.shiftHalls.shiftDetail.time,
+            accessor: d => d.shiftHall.shiftDetail.time,
             style: style,
             headerStyle: headerStyle,
             width: 120,
@@ -31,7 +31,7 @@ const RegisteredShifts = (props) => {
         {
             id: 'dow',
             Header: 'Thứ',
-            accessor: d => d.shiftHalls.shiftDetail.dayOfWeek,
+            accessor: d => d.shiftHall.shiftDetail.dayOfWeek,
             style: style,
             headerStyle: headerStyle,
             width: 70,
@@ -39,7 +39,7 @@ const RegisteredShifts = (props) => {
         {
             id: 'Date',
             Header: 'Ngày',
-            accessor: d => d.shiftHalls.shiftDetail.date,
+            accessor: d => d.shiftHall.shiftDetail.date,
             style: style,
             headerStyle: headerStyle,
             maxWidth: 130,
@@ -47,14 +47,14 @@ const RegisteredShifts = (props) => {
         {
             id: 'moduleId',
             Header: 'Mã HP',
-            accessor: d => d.shiftHalls.shiftDetail.module.moduleId,
+            accessor: d => d.shiftHall.shiftDetail.module.moduleId,
             style: style,
             headerStyle: headerStyle,
             maxWidth: 120,
         }, {
             id: 'module',
             Header: 'Học phần',
-            accessor: d => d.shiftHalls.shiftDetail.module.name,
+            accessor: d => d.shiftHall.shiftDetail.module.name,
             style: style,
             headerStyle: headerStyle,
             minWidth: 400,
@@ -62,7 +62,7 @@ const RegisteredShifts = (props) => {
         {
             id: 'hall',
             Header: 'Phòng thi',
-            accessor: d => d.shiftHalls.hallDetail.name,
+            accessor: d => d.shiftHall.hallDetail.name,
             headerStyle: headerStyle,
             maxWidth: 130,
         }]
