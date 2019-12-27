@@ -24,21 +24,6 @@ const userSchema = new Schema({
   },
   schoolYear: {
     type: String
-  },
-  profilePhoto: {
-    type: String
-  },
-  isAdmin: {
-    type: Boolean
-  },
-  isEligible: {
-    type: Boolean
-  },
-  registeredModules: {
-    type: Array
-  },
-  examShifts: {
-    type: Array
   }
 })
 

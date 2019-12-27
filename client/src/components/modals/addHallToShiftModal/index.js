@@ -11,40 +11,44 @@ import { Error } from '../../formElements'
 import { Select } from '../../formElements/style'
 import { Actions, Wrapper } from '../style'
 import { getAllHalls } from '../../../graphql/queries/hall/getHall'
+import { Table, Td, Th, Tr, IconWrapper } from '../selectShiftHallModal/style'
 import { Label } from '../../globals';
+import { removeDirectivesFromDocument } from 'apollo-utilities';
 
 const AddHallModal = () => {
+    
+    const style = modalStyles()
 
     const dispatch = useDispatch();
+    const close = () => dispatch(closeModal())
 
     const isOpen = useSelector(state => state.modals.isOpen)
     const shiftId = useSelector(state => state.shift.shiftId)
 
-    const close = () => dispatch(closeModal());
+    const [hallIdList, setHallIdList] = useState([])
 
-    const { data } = useQuery(getAllHalls);
-    //const isLoading = networkStatus === 1 || networkStatus === 2;
+    const { data } = useQuery(getAllHalls)
 
+    // A mutation to add halls to a shift
     const [createShiftHall, { loading }] = useMutation(
         createShiftHallMutation
-    );
+    )
 
-    const [inputHall, setInputHall] = useState('')
-    const [hallError, setHallError] = useState(false)
+    // Concat hall's id to the array using spread operator
+    const handleSelect = (hallId) => setHallIdList([...hallIdList, hallId])
 
-    const changeHall = e => {
-        let hallId = e.target.value;
-        setInputHall(hallId)
-        setHallError(false)
-    };
-
-    const handleAddHall = async () => {
-        if (!inputHall || inputHall.length === 0) { return setHallError(true) }
-        await createShiftHall({ variables: { shiftId: shiftId, hallId: inputHall } });
-        dispatch(closeModal())
+    //Delete a specific hall's id from the array
+    const handleUnselect = (hallId) => {
+        let index = hallIdList.indexOf(hallId)
+        hallIdList.splice(index, 1)
+        setHallIdList([...hallIdList])
     }
 
-    const style = modalStyles();
+    // Adding all hall from the array to the shift
+    const handleAddHall = async () => {
+        await hallIdList.map(hallId => createShiftHall({ variables: { shiftId: shiftId, hallId: hallId } }))
+        dispatch(closeModal())
+    }
 
     return (
         <div>
@@ -57,15 +61,32 @@ const AddHallModal = () => {
             >
                 <ModalContainer title='Thêm phòng thi'>
                     <Wrapper>
-                        <Label>
-                            <Select onChange={changeHall}>
-                                <option value="" selected disabled hidden>Chọn phòng thi</option>
-                                {data && data.getAllHalls.map(hall => (
-                                    <option value={hall.id}>{`${hall.name} - ${hall.capacity} máy`}</option>
-                                ))}
-                            </Select>
-                            {hallError ? <Error>Vui lòng chọn phòng thi</Error> : ''}
-                        </Label>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <Th>Giang đường</Th>
+                                    <Th>Sức chứa</Th>
+                                    <Th>Chọn</Th>
+                                </tr>
+                            </thead>
+                            {data && data.getAllHalls.map(hall => (
+                                <tbody>
+                                    <Tr>
+                                        <Td>{hall.name}</Td>
+                                        <Td>{hall.capacity}</Td>
+                                        <Td>
+                                            <IconWrapper>
+                                                <PrimaryButton
+                                                    onClick={() => hallIdList.includes(hall.id) ? handleUnselect(hall.id) : handleSelect(hall.id)}
+                                                >
+                                                    {hallIdList.includes(hall.id) ? 'Đã chọn' : 'Chọn'}
+                                                </PrimaryButton>
+                                            </IconWrapper>
+                                        </Td>
+                                    </Tr>
+                                </tbody>
+                            ))}
+                        </Table>
                     </Wrapper>
                     <Actions>
                         <WarnButton onClick={() => close()}>Hủy</WarnButton>

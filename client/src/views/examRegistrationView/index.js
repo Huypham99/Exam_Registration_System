@@ -27,8 +27,15 @@ const ExamDetailStudent = (props) => {
 
     const dispatch = useDispatch()
 
-    const { loading, data: exam } = useQuery(getExamByIdQuery, { variables: { id: id } });
-    const { data: ineligible_student, loading: ineligible_student_loading } = useQuery(getIneligibleByStudentIdQuery, { variables: { studentId: currentUser.studentId } });
+    const { loading, data: exam } = useQuery(
+        getExamByIdQuery,
+        { variables: { id: id } }
+    );
+
+    const { data: ineligible_student, loading: ineligible_student_loading } = useQuery(
+        getIneligibleByStudentIdQuery,
+        { variables: { studentId: currentUser.studentId } }
+    );
 
     const style = TableCell;
 
@@ -75,9 +82,10 @@ const ExamDetailStudent = (props) => {
             id: 'hall',
             Header: 'DS phòng thi',
             Cell: (props) => <PrimaryButton onClick={() => {
-                (moduleIdList.includes(props.original.module.id))
-                    ? dispatch(addToast('error', 'Bạn không đủ điều kiện để xem'))
-                    : dispatch(openModal('SELECT_SHIFT_HALL'))
+                if (moduleIdList.includes(props.original.module.moduleId)) {
+                    return alert('Bạn không đủ điều kiện đăng kí môn thi này, vui lòng đăng kí môn khác !!')
+                }
+                dispatch(openModal('SELECT_SHIFT_HALL'))
                 dispatch(setShiftId(props.original.id))
             }}
             >Xem</PrimaryButton>,
@@ -88,7 +96,7 @@ const ExamDetailStudent = (props) => {
 
     useEffect(() => {
         ineligible_student && ineligible_student.getIneligibleByStudentId.map(data => {
-            moduleIdList.push(data.moduleInfor.id)
+            moduleIdList.push(data.moduleId)
         })
     });
 

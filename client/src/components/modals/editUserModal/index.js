@@ -17,7 +17,7 @@ const EditUserModal = () => {
 
     const isOpen = useSelector(state => state.modals.isOpen)
 
-    const [editUser, { loading }] = useMutation(
+    const [editUser, { loading, error }] = useMutation(
         editUserMutation,
         { refetchQueries: [{ query: getAllUsers }] }
     );
@@ -123,6 +123,7 @@ const EditUserModal = () => {
         await editUser({
             variables: {
                 studentId: parseInt(studentId),
+                email: email,
                 newName: inputName,
                 newEmail: inputEmail,
                 newDob: inputDob,
@@ -145,6 +146,7 @@ const EditUserModal = () => {
             >
                 <ModalContainer title='Sửa thông tin sinh viên'>
                     <Wrapper>
+                        {error ? <Error>{error.message}</Error> : null}
                         <Input
                             type="text"
                             defaultValue={inputName}
@@ -200,7 +202,20 @@ const EditUserModal = () => {
                         <WarnButton onClick={() => close()}>Hủy</WarnButton>
                         <PrimaryButton
                             onClick={() => updateUser()}
-                            disabled={!inputName || !inputEmail || !inputDob || !inputStudentId || !inputProgram || !inputSchoolYear}
+                            disabled={
+                                !inputName ||
+                                !inputEmail ||
+                                !inputDob ||
+                                !inputStudentId ||
+                                !inputProgram ||
+                                !inputSchoolYear ||
+                                inputName === name &&
+                                inputEmail === email &&
+                                inputDob === dob &&
+                                inputStudentId === studentId &&
+                                inputProgram === program &&
+                                inputSchoolYear === schoolYear
+                            }
                         >{loading ? 'Cập nhật...' : 'Cập nhật'}</PrimaryButton>
                     </Actions>
                 </ModalContainer>

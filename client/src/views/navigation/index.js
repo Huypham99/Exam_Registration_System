@@ -231,11 +231,11 @@ const Navigation = (props) => {
                             )}
                         </Route>
                         <Divider />
-                        <Route path='/hbhb'>
+                        <Route path='/setting'>
                             {({ match }) => (
                                 <AvatarGrid isActive={!!match}>
                                     <AvatarLink
-                                        to={'/hbhb'}
+                                        to={'/setting'}
                                     >
                                         <IconWrapper>
                                             <Icon glyph="user" size='27' />

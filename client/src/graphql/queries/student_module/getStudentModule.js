@@ -58,9 +58,7 @@ ${moduleInforFragment}
 export const getIneligibleByStudentIdQuery = gql`
 query ($studentId: Int){
     getIneligibleByStudentId(studentId: $studentId){
-      moduleInfor{
-        id
-      }
+      moduleId
     }
 }
 `;

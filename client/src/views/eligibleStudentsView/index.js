@@ -80,7 +80,7 @@ const EligibleStudents = () => {
             />
         ),
         headerStyle: headerStyle,
-        width: 100,
+        width: 200,
     }]
 
 
@@ -89,9 +89,9 @@ const EligibleStudents = () => {
             data={data && data.getEligibleStudents}
             isLoading={loading}
             columns={columns}
-            isExecl
+            isExcel={true}
             title="Eligible Students List"
-            api="upload_ineligible_student_csv"
+            api="excel/eligible-students"
         />
     )
 };

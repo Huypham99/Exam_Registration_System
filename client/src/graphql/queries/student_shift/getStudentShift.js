@@ -6,6 +6,7 @@ export const getStudentShiftByStudentIdQuery = gql`
 query($studentId: String){
   getStudentShiftByStudentId(studentId: $studentId){
     shiftHall{
+      id
       shiftDetail{
         ...shiftInfor
         module{
@@ -34,6 +35,14 @@ query($shiftHallId: String){
       studentId
       schoolYear
     }
+	}
+}
+`
+
+export const getRegisterStudentsQuery = gql`
+query($shiftHallId: String){
+  getStudentShiftByShiftHallId(shiftHallId: $shiftHallId){
+    id
 	}
 }
 `

@@ -89,7 +89,7 @@ const StudentsList = () => {
             columns={columns}
             title="Danh sách sinh viên"
             isExcel={true}
-            api="upload-user-csv"
+            api="excel/students"
             createFunc={() => createUser()}
         />
     )

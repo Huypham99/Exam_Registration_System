@@ -1,6 +1,6 @@
 module.exports = (id) => {
     const admins = [
-      '5dc1ade7b8bafb44dcdf4057'
+      '5de5ddab49c83a1b48f6661b'
     ];
     return admins.indexOf(id) > -1;
   };

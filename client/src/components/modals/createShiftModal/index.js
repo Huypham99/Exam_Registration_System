@@ -12,7 +12,8 @@ import { Actions, Wrapper, ModalBody } from '../style'
 import { Label } from '../../globals';
 import { getAllModulesQuery } from '../../../graphql/queries/module/getModule'
 import { setShiftId } from '../../../actions/shiftInfor'
-import { Select, InputDate } from '../../formElements/style';
+import { Input } from '../../formElements';
+import { Select } from '../../formElements/style';
 
 const CreateShiftModal = () => {
 
@@ -47,10 +48,7 @@ const CreateShiftModal = () => {
 
     const changeTime = e => {
         let time = e.target.value;
-        let hour = time.split(':')[0]
-        let minute = time.split(':')[1]
-        let formatedTime = `${hour}h${minute}`
-        setInputTime(formatedTime)
+        setInputTime(time)
         setTimeError(false)
     };
 
@@ -86,8 +84,7 @@ const CreateShiftModal = () => {
                 moduleId: inputModule,
                 examId: examId
             }
-        });
-
+        })
         dispatch(openModal('ADD_HALL_MODAL'))
     }
 
@@ -117,15 +114,19 @@ const CreateShiftModal = () => {
                             </Label>
 
                             {dayOfWeekError ? <Error>Thứ không được để trống</Error> : ''}
-                            <Label>
+                            <Input
+                                inputType="date"
+                                onChange={changeDate}
+                            >
                                 Ngày thi
-                            <InputDate type='date' onChange={changeDate}></InputDate>
-                            </Label>
+                            </Input>
                             {dateError ? <Error>Ngày không được để trống</Error> : ''}
-                            <Label>
-                                Thời gian
-                            <InputDate type='time' onChange={changeTime}></InputDate>
-                            </Label>
+                            <Input
+                                inputType="time"
+                                onChange={changeTime}
+                            >
+                                Giờ thi
+                            </Input>
                             {timeError ? <Error>Thời gian không được để trống</Error> : ''}
                             <Label>
                                 Học phần
@@ -136,7 +137,7 @@ const CreateShiftModal = () => {
                                     ))}
                                 </Select>
                             </Label>
-                            {moduleError ? <Error>Vui lòng chọn học phần cho ca thi !!</Error> : <p>Chọn môn thi cho ca thi</p>}
+                            {moduleError && <Error>Vui lòng chọn học phần cho ca thi !!</Error>}
                         </ModalBody>
                     </Wrapper>
                     <Actions>
@@ -144,7 +145,7 @@ const CreateShiftModal = () => {
                         <PrimaryButton
                             onClick={() => handleCreateShift()}
                             disabled={!inputDate || !inputTime || !inputDayOfWeek || !inputModule || timeError || dateError || dayOfWeekError || moduleError}
-                        >{loading ? 'Tạo mới...' : 'Tạo mới'}</PrimaryButton>
+                        >Thêm phòng thi</PrimaryButton>
                     </Actions>
                 </ModalContainer>
             </Modal>

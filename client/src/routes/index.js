@@ -16,7 +16,8 @@ import EligibleStudents from '../views/eligibleStudentsView'
 import ExamListView from '../views/examListView'
 import ExamDetailView from '../views/examDetailView'
 import ExamRegistrationView from '../views/examRegistrationView'
-import RegisteredShifts from '../views//registeredShiftView'
+import RegisteredShifts from '../views/registeredShiftView'
+import UserSetting from '../views/userSetting'
 import { ViewGrid } from '../components/layout'
 import ModalRoot from '../components/modals/modalRoot'
 import SignedOutFallback from '../helper/signed-out-fallback'
@@ -28,10 +29,8 @@ import { useSelector } from 'react-redux'
 
 const Routes = () => {
 
-    // const isLoggedIn = useSelector(state => state.isLoggedIn)
-    // const isAdmin = useSelector(state => state.isAdmin)
-
     const { loading, data } = useQuery(getCurrentUserQuery)
+
     const isAdmin = data && data.getCurrentUser.isAdmin
 
     const StudentsListFallback = SignedOutFallback(StudentsList, () => <Redirect to='/login' />);
@@ -45,6 +44,7 @@ const Routes = () => {
     const RegisteredShiftsFallback = SignedOutFallback(RegisteredShifts, () => <Redirect to='/login' />);
     const HallsListFallback = SignedOutFallback(HallsList, () => <Redirect to='/login' />);
     const AdminDashboardFallback = SignedOutFallback(AdminDashboard, () => <Redirect to='/login' />);
+    const UserSettingFallback = SignedOutFallback(UserSetting, () => <Redirect to='/login' />);
     const UserDashboardFallback = SignedOutFallback(UserDashboard, () => <Redirect to='/login' />);
     const LogInFallback = SignedOutFallback(() => <Redirect to='/dashboard' />, LogIn);
 
@@ -54,7 +54,6 @@ const Routes = () => {
             <AppViewWrapper>
                 <Route component={Navigation} />
                 <ModalRoot />
-                {/* <Toast /> */}
                 <Switch>
                     <Route path='/login' component={LogInFallback} />
                     <AuthenticatedComponent>
@@ -71,6 +70,7 @@ const Routes = () => {
                                 <Route path='/exam/:examId' component={ExamDetailViewFallback} />
                                 <Route path='/exam_registration/:examId' component={ExamRegistrationViewFallback} />
                                 <Route path='/registered' component={RegisteredShiftsFallback} />
+                                <Route path='/setting' component={UserSettingFallback} />
                             </ViewGrid>
                         }
                     </AuthenticatedComponent>

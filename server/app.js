@@ -8,14 +8,16 @@ const Cookies = require('cookies')
 const parse = require('csv-parse')
 const multer = require('multer')
 const fs = require('fs')
+const bodyParser = require('body-parser')
 const authRoutes = require('./routes/auth')
-
+const excelRoutes = require('./routes/excel')
 const User = require('./models/user')
 const Student_Module = require('./models/student_module')
 const Encrypt = require('./utils/password/encryption')
 const ExistingUser = require('./utils/validation/existingUser')
 
 require('dotenv/config')
+
 const app = express()
 
 var corsOptions = {
@@ -24,6 +26,7 @@ var corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.use(bodyParser.json());
 
 mongoose.connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0-oxtha.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true`
@@ -37,92 +40,42 @@ mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB')
 })
 
-app.use('/verifyToken', async (req, res) => {
-    try {
-        let cookies = new Cookies(req, res);
-        let token = await cookies.get('access_token');
-        let verified = await jwt.verify(token, process.env.SECRET_KEY);
-        res.send(verified)
-    } catch (error) {
-        res.send(error)
-    }
-})
-
-const upload = multer({ dest: 'tmp/csv/' });
-
-app.use('/upload-user-csv', upload.single('file'), (req, next, res) => {
-    try {
-        let results = []
-
-        fs.createReadStream(req.file.path)
-            .pipe(parse({ columns: function (e) { return e } }))
-            .on('data', (row) => {
-                results.push(row)
-            })
-            .on('end', () => {
-                results.map(async data => {
-
-                    let existUser = await ExistingUser(data['studentId'])
-                    if (existUser) throw ((`Student with id: ${data['studentId']} has already existed`));
-
-                    let encryptedPassword = await Encrypt(data['password']);
-
-                    const user = await new User({
-                        name: data['name'],
-                        password: encryptedPassword,
-                        email: data['email'],
-                        dob: data['dob'],
-                        studentId: data['studentId'],
-                        program: data['program'],
-                        schoolYear: data['schoolYear']
-                    })
-                    return user.save()
-                })
-                fs.unlink(`${req.file.path}`, function (err) {
-                    if (err) return console.log(err);
-                    console.log('file deleted successfully');
-                })
-            })
-    } catch (error) {
-        return next(error)
-    }
-
-})
-
-app.use('/upload_ineligible_student_csv', upload.single('file'), (req, next, res) => {
-    try {
-        let results = []
-
-        fs.createReadStream(req.file.path)
-            .pipe(parse({ columns: function (e) { return e } }))
-            .on('data', (row) => {
-                results.push(row)
-            })
-            .on('close', () => {
-                results.map(async data => {
-
-                    const studentModule = await new Student_Module({
-                        studentId: data['Mã số sinh viên'],
-                        moduleId: data['Mã học phần'],
-                        isEligible: true
-                    })
-                    return studentModule.save()
-                })
-                fs.unlink(`${req.file.path}`, function (err) {
-                    if (err) return console.log(err);
-                    console.log('file deleted successfully');
-                })
-            })
-    } catch (error) {
-        return next(error)
-    }
-
-})
-
-
 app.use('/auth', authRoutes);
+app.use('/excel', excelRoutes);
 
+app.use((error, req, res, next) => {
+    res.status(error.status)
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
+})
 
-const server = new ApolloServer({ schema, context: ({ req, res }) => ({ ...req, ...res }) });
+const server = new ApolloServer({
+    schema, context: ({ req, res }) => {
+
+        const now = Date.now().valueOf() / 1000
+
+        const cookies = Cookies(req, res)
+
+        const token = cookies.get('access_token')
+        
+        if(!token) throw new Error('Please login !!')
+
+        let decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+        if (typeof decoded.exp !== 'undefined' && decoded.exp < now) {
+            throw new Error(`token expired: ${JSON.stringify(decoded)}`)
+        }
+        if (typeof decoded.nbf !== 'undefined' && decoded.nbf > now) {
+            throw new Error(`token not yet valid: ${JSON.stringify(decoded)}`)
+        }
+
+        let user = decoded.sub;
+
+        return { req, res, user }
+    }
+});
 
 server.applyMiddleware({ app, cors: corsOptions });

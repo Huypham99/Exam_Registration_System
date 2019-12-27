@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal, openModal } from '../../../actions/modals'
@@ -6,36 +6,31 @@ import { setStudentsList } from '../../../actions/studentsList'
 import { modalStyles, Wrapper, Actions } from '../style'
 import ModalContainer from '../modalContainer'
 import { PrimaryButton, WarnButton } from '../../button/index'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { getShiftByIdQuery } from '../../../graphql/queries/shift/getShift'
-import { getStudentShiftByShiftHallIdQuery, getStudentShiftByStudentIdQuery } from '../../../graphql/queries/student_shift/getStudentShift'
+import { getStudentShiftByShiftHallIdQuery } from '../../../graphql/queries/student_shift/getStudentShift'
 import { Query } from 'react-apollo'
 import { Table, Td, Th, IconWrapper } from './style'
 import { withCurrentUser } from '../../withCurrentUser'
 
 const HallListModal = (props) => {
-
-    const isOpen = useSelector(state => state.modals.isOpen)
-    const id = useSelector(state => state.shift.id)
-    const studentId = useSelector(state => state.id)
+   
     const { currentUser } = props
 
-    const [selected, setSelected] = useState(false)
+    const isOpen = useSelector(state => state.modals.isOpen);
+    const id = useSelector(state => state.shift.id);
 
     // Array stores list of registered student of each hall
     const students = []
 
     const dispatch = useDispatch()
 
+    const style = modalStyles()
 
-    const style = modalStyles();
+    const close = () => dispatch(closeModal())
 
-    const close = () => dispatch(closeModal());
-
-
-    const { data: shift } = useQuery(getShiftByIdQuery, { variables: { id: id } });
-    const { data: student_shift, loading: student_shift_loading } = useQuery(getStudentShiftByStudentIdQuery, { variables: { studentId: currentUser.id } });
-
+    const { data: shift } = useQuery(getShiftByIdQuery, { variables: { id: id } })
+    
     return (
         <Modal
             ariaHideApp={false}
@@ -59,17 +54,18 @@ const HallListModal = (props) => {
                             <tbody>
                                 <Query query={getStudentShiftByShiftHallIdQuery} variables={{ shiftHallId: hall.id }}>
                                     {({ data }) => (
-                                        data && data.getStudentShiftByShiftHallId.map(data => students.push(data.student)),
                                         <tr>
                                             <Td>{hall.hallDetail.name}</Td>
                                             <Td>{hall.hallDetail.capacity}</Td>
                                             <Td>{data && data.getStudentShiftByShiftHallId.length}</Td>
                                             <Td>
                                                 <IconWrapper>
-                                                    <PrimaryButton onClick={() => {
-                                                        dispatch(setStudentsList(students))
+                                                    <PrimaryButton onClick={() => (
+                                                        data && data.getStudentShiftByShiftHallId.map(data => students.push(data.student)),
+                                                        dispatch(setStudentsList(students)),
                                                         dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
-                                                    }}
+                                                    )}
+                                                    disabled={data && data.getStudentShiftByShiftHallId.length === 0}
                                                     >Xem</PrimaryButton>
                                                 </IconWrapper>
                                             </Td>

@@ -4,7 +4,8 @@ type Student_Shift {
     id: ID!
     studentId: String
     shiftHallId: String
-    shiftHalls: Shift_Hall
+    shiftHall: Shift_Hall
+    student: User
  }
 
  input createNewStudentShiftInput {

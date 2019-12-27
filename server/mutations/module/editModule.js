@@ -1,11 +1,23 @@
 const Module = require('../../models/module')
-module.exports = async (root, { input }) => {
+const Capitalize = require('../../utils/inputFormat/capitalize')
+const { editModuleInputValidation } = require('../../utils/validation/module')
+
+module.exports = async (root, { input }, { user }) => {
+
+    await editModuleInputValidation(input)
+
+    if (!user.isAdmin) throw new Error('You are not allowed to do access this resource !!')
 
     const { moduleId, newModuleId, newName } = input
 
-    const existModule = await Module.findOne({ moduleId: newModuleId })
-    if (existModule) { throw new Error('Đã tồn tại học phần này dmm!!') }
+    let formatedName = Capitalize(newName)
+    let formatedModuleId = newModuleId.toUpperCase()
 
-    const module = await Module.findOneAndUpdate({ moduleId: moduleId }, { name: newName, moduleId: newModuleId }, { new: true });
-    
+    if (moduleId !== formatedModuleId) {
+        const existModule = await Module.findOne({ moduleId: formatedModuleId })
+        if (existModule) { throw new Error('Đã tồn tại học phần này dmm!!') }
+    }
+
+    return Module.findOneAndUpdate({ moduleId: moduleId }, { name: formatedName, moduleId: formatedModuleId }, { new: true });
+
 }

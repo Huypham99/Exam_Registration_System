@@ -49,7 +49,7 @@ const LogIn = (props) => {
                 Đăng nhập hệ thống
             </Title>
             <Form>
-                {serverError && <Error>{serverError}</Error>}
+                {error && <Error>{error.message}</Error>}
                 <Input
                     type="text"
                     defaultValue={username}
@@ -58,7 +58,7 @@ const LogIn = (props) => {
                 >Username</Input>
                 {usernameError ? <Error>Username can not be blank</Error> : ''}
                 <Input
-                    type="password"
+                    inputType="password"
                     defaultValue={password}
                     onChange={changePassword}
                     placeholder={'password'}

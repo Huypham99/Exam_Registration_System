@@ -33,6 +33,7 @@ type User{
   
   input EditUserInput {
     studentId: Int
+    email: String
     newName: String
     newPassword: String
     newEmail: String

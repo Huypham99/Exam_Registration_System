@@ -162,7 +162,7 @@ export const Label = styled.label`
   font-weight: 500;
   font-size: 0.875rem;
   letter-spacing: -0.4px;
-  color: ${theme.text.default};
+  color: ${theme.text.secondary};
   &:not(:first-of-type) {
     margin-top: 1.5rem;
   }

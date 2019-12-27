@@ -11,6 +11,12 @@ input createNewHallInput{
   capacity: Int
 }
 
+input editHallInput{
+  name: String
+  newName: String
+  newCapacity: Int
+}
+
 extend type Query {
   getHallById(id: ID): Hall
   getAllHalls: [Hall]
@@ -18,6 +24,7 @@ extend type Query {
 
 extend type Mutation {
   createNewHall(input: createNewHallInput): Hall
+  editHall(input: editHallInput): Hall
   deleteHall(id: String): Hall
 }
 `

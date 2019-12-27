@@ -152,25 +152,6 @@ export const Select = styled.select`
   }
 `
 
-export const InputDate = styled.input`
-  margin-top: 10px;
-  padding:  8px 20px;
-  border: solid 2px ${theme.bg.inactive};
-  background: ${theme.bg.wash};
-  font-size: 17px;
-  color: ${theme.text.placeholder};
-  border-radius: 4px;
-  outline: none;
-  &:hover{
-    border-color: ${theme.text.alt};
-    transition: ${Transition.hover.on};
-  }
-  &:focus{
-    border-color: ${theme.brand.alt};
-    transition: ${Transition.hover.on};
-  }
-`
-
 export const Option = styled.option`
   color: ${theme.text.placeholder};
   border-radius: 4px;

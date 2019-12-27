@@ -33,8 +33,6 @@ const ExcelUploadForm = (props) => {
     const displayUploadForm = () => setDisplay(true);
     const cancelUploadForm = () => setDisplay(false);
 
-
-
     return (
         <UploadButton>
             <PrimaryButton onClick={() => displayUploadForm()}>

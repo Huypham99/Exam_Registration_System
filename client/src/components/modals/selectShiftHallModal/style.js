@@ -33,7 +33,7 @@ export const Th= styled.th`
 
 export const Tr= styled.tr`
     background: ${props => (
-        props.registered == props.capacity ? theme.warn.wash : theme.bg.default
+        (props.registered && props.capacity) && props.registered === props.capacity ? theme.warn.wash : theme.bg.default
     )}
 `;
 

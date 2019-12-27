@@ -12,6 +12,7 @@ import SelectShiftHallModal from './selectShiftHallModal'
 import CreateHallModal from './createHallModal'
 import DeleteHallModal from './deleteHallModal'
 import HallListModal from './hallListModal'
+import EditHallModal from './editHallModal'
 import RegisteredStudentModal from './regiteredStudentsModal';
 import PrintRegStudentsModal from './printRegisteredStudentsModal';
 import { useSelector } from 'react-redux'
@@ -33,7 +34,8 @@ const ModalRoot = () => {
         DELETE_HALL_MODAL: DeleteHallModal,
         HALL_LIST_MODAL: HallListModal,
         REGISTERED_STUDENTS_MODAL: RegisteredStudentModal,
-        PRINT_REG_STUDENTS_MODAL: PrintRegStudentsModal
+        PRINT_REG_STUDENTS_MODAL: PrintRegStudentsModal,
+        EDIT_HALL_MODAL: EditHallModal
     };
 
     const type = useSelector(state => state.modals.modalType)

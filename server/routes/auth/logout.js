@@ -7,7 +7,7 @@ const logoutRouter = Router();
 logoutRouter.get('/', async (req, res) => {
     try {
         let cookies = new Cookies(req, res);
-        let clearCookie = await cookies.set('access_token', { maxAge: Date.now(), httpOnly: true });
+        let clearCookie = await cookies.set('access_token', { expires: Date.now().valueOf() / 1000, httpOnly: true });
         return res.redirect('http://localhost:3000/login')
     } catch (error) {
         res.send(error)

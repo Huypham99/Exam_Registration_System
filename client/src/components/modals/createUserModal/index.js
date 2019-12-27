@@ -9,6 +9,7 @@ import ModalContainer from '../modalContainer'
 import { PrimaryButton, WarnButton } from '../../button/index'
 import { Input, Error } from '../../formElements'
 import { Actions, Wrapper } from '../style'
+import { Label } from '../../globals';
 import { getAllUsers } from '../../../graphql/queries/user/getUser'
 import isEmail from 'validator/lib/isEmail';
 
@@ -134,11 +135,10 @@ const CreateUserModal = () => {
                         {emailError ? <Error>Email không được để trống</Error> : ''}
                         {validEmailError ? <Error>Email không hợp lệ</Error> : ''}
                         <Input
-                            type="date"
-                            defaultValue={inputDob}
+                            inputType="date"
                             onChange={changeDob}
                         >
-                            Ngày Sinh
+                            Ngày sinh
                         </Input>
                         {dobError ? <Error>Ngày sinh không được để trống</Error> : ''}
                         <Input

@@ -6,7 +6,7 @@ import { TableHeader, TableCell } from '../../components/globals'
 import TableActions from '../../components/tableActions'
 import { useDispatch } from 'react-redux'
 import { openModal } from '../../actions/modals';
-import { setHallId } from '../../actions/hallInfor';
+import { setHallId, setHall } from '../../actions/hallInfor';
 
 
 const HallsList = () => {
@@ -25,11 +25,11 @@ const HallsList = () => {
         dispatch(openModal('DELETE_HALL_MODAL'))
     }
 
-    // const editHall = (props) => {
-    //     const { hallName, hallId } = props.row
-    //     dispatch(setHall(hallName, hallId))
-    //     dispatch(openModal('EDIT_HALL_MODAL'))
-    // }
+    const editHall = (props) => {
+        const { hallName, hallCapacity } = props.row
+        dispatch(setHall(hallName, hallCapacity))
+        dispatch(openModal('EDIT_HALL_MODAL'))
+    }
 
     const createHall = (props) => {
         dispatch(openModal('CREATE_HALL_MODAL'))
@@ -51,7 +51,7 @@ const HallsList = () => {
         Header: 'Edit',
         Cell: (props) => (
             <TableActions
-                // editFunc={() => editHall(props)}
+                editFunc={() => editHall(props)}
                 deleteFunc={() => deleteHall(props)}
             />
         ),

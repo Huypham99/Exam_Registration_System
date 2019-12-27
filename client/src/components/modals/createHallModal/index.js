@@ -13,21 +13,22 @@ import { getAllHalls } from '../../../graphql/queries/hall/getHall'
 
 const CreatehallModal = () => {
 
+    const style = modalStyles()
+
     const dispatch = useDispatch();
-
-    const isOpen = useSelector(state => state.modals.isOpen)
-
     const close = () => dispatch(closeModal());
 
-    const [createHall, { error, loading }] = useMutation(
-        createHallMutation,
-        { refetchQueries: [{ query: getAllHalls }] }
-    );
+    const isOpen = useSelector(state => state.modals.isOpen)
 
     const [inputName, setInputName] = useState('')
     const [inputCapacity, setInputCapacity] = useState('')
     const [nameError, setNameError] = useState(false)
     const [capacityError, setCapacityError] = useState(false)
+
+    const [createHall, { error, loading }] = useMutation(
+        createHallMutation,
+        { refetchQueries: [{ query: getAllHalls }] }
+    );
 
     const changeName = e => {
         let name = e.target.value;
@@ -41,14 +42,17 @@ const CreatehallModal = () => {
         setCapacityError(false)
     };
 
-    const handleCreatehall = async () => {
+    const handleCreateHall = async () => {
         if (!inputName || inputName.length === 0) { return setNameError(true) }
         if (!inputCapacity || inputCapacity.length === 0) { return setCapacityError(true) }
-        await createHall({ variables: { name: inputName, capacity: parseInt(inputCapacity) } });
+        await createHall({ 
+            variables: { 
+                name: inputName, 
+                capacity: parseInt(inputCapacity) 
+            } 
+        });
         dispatch(closeModal())
     }
-
-    const style = modalStyles();
 
     return (
         <div>
@@ -79,7 +83,7 @@ const CreatehallModal = () => {
                     </Wrapper>
                     <Actions>
                         <WarnButton onClick={() => close()}>Hủy</WarnButton>
-                        <PrimaryButton onClick={() => handleCreatehall()}>{loading ? 'Tạo mới...' : 'Tạo mới'}</PrimaryButton>
+                        <PrimaryButton onClick={() => handleCreateHall()}>{loading ? 'Tạo mới...' : 'Tạo mới'}</PrimaryButton>
                     </Actions>
                 </ModalContainer>
 

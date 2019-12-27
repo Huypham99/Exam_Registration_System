@@ -19,6 +19,7 @@ extend type Query {
 
 extend type Mutation {
   createNewShiftHall(input: createNewShiftHallInput): Shift_Hall
+  deleteShiftHallByShiftId(id: String): Shift_Hall
 }
 `
 module.exports = Shift_Hall;

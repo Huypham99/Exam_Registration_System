@@ -22,6 +22,7 @@ type Student_Module {
  }
  extend type Query {
     getIneligibleByStudentId(studentId: Int): [Student_Module]
+    getEligibleByStudentId(studentId: Int): [Student_Module]
     getStudentModuleByModuleId(moduleId: String): [Student_Module]
     getEligibleStudents: [Student_Module]
     getIneligibleStudents: [Student_Module]

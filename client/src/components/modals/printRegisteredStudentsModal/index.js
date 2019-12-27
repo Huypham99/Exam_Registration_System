@@ -1,7 +1,5 @@
 import React, { useRef } from 'react';
 import { useQuery } from '@apollo/react-hooks'
-// import { getStudentShiftByStudentIdQuery } from '../../../graphql/queries/student_shift/getStudentShift'
-// import { getUserByIdQuery } from '../graphql/queries/user/getUser'
 import { useSelector, useDispatch } from 'react-redux'
 import { Main, Table, Td, Th, Title, TdCenter, Divider, IconWrapper } from './style'
 import { PrimaryButton, WarnButton } from '../../button'
@@ -23,9 +21,6 @@ const PrintRegStudentsModal = () => {
 
     const dispatch = useDispatch()
 
-    // const { data, loading } = useQuery(getStudentShiftByStudentIdQuery, { variables: { studentId: studentId } });
-    // const { data: user } = useQuery(getUserByIdQuery, { variables: { id: studentId } });
-
     const back = () => dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
 
     const componentRef = useRef()
@@ -42,39 +37,45 @@ const PrintRegStudentsModal = () => {
             <ModalContainer title='In danh sách sinh viên đã đăng kí'>
                 <Main ref={componentRef}>
                     <Table>
-                        <tr>
-                            <TdCenter>ĐẠI HỌC QUỐC GIA HÀ NỘI</TdCenter>
-                            <TdCenter><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></TdCenter>
-                        </tr>
-                        <tr>
-                            <TdCenter><b>TRƯỜNG ĐẠI HỌC CÔNG NGHỆ</b></TdCenter>
-                            <TdCenter><b>Độc lập - Tự do - Hạnh phúc</b></TdCenter>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <TdCenter>ĐẠI HỌC QUỐC GIA HÀ NỘI</TdCenter>
+                                <TdCenter><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></TdCenter>
+                            </tr>
+                            <tr>
+                                <TdCenter><b>TRƯỜNG ĐẠI HỌC CÔNG NGHỆ</b></TdCenter>
+                                <TdCenter><b>Độc lập - Tự do - Hạnh phúc</b></TdCenter>
+                            </tr>
+                        </tbody>
                     </Table>
                     <Divider />
                     <Table>
-                        <tr>
-                            <TdCenter>
-                                <b>DANH SÁCH SINH VIÊN</b>
-                            </TdCenter>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <TdCenter>
+                                    <b>DANH SÁCH SINH VIÊN</b>
+                                </TdCenter>
+                            </tr>
+                        </tbody>
                     </Table>
                     <Divider />
                     <Table>
-                        <tr>
-                            <td>Ngày thi</td>
-                            <td><b>{date}</b></td>
-                            <td>Giờ thi</td>
-                            <td><b>{time}</b></td>
-                            <td>Thứ</td>
-                            <td><b>{dayOfWeek}</b></td>
-                        </tr>
-                        <tr>
-                            <td>Môn thi</td>
-                            <td><b>{moduleName}</b></td>
-                            <td>Mã Môn Thi</td>
-                            <td><b>{moduleId}</b></td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>Ngày thi</td>
+                                <td><b>{date}</b></td>
+                                <td>Giờ thi</td>
+                                <td><b>{time}</b></td>
+                                <td>Thứ</td>
+                                <td><b>{dayOfWeek}</b></td>
+                            </tr>
+                            <tr>
+                                <td>Môn thi</td>
+                                <td><b>{moduleName}</b></td>
+                                <td>Mã Môn Thi</td>
+                                <td><b>{moduleId}</b></td>
+                            </tr>
+                        </tbody>
                     </Table>
                     <Divider />
                     <Table>
@@ -103,14 +104,16 @@ const PrintRegStudentsModal = () => {
                     </Table>
                     <Divider />
                     <Table>
-                        <tr>
-                            <TdCenter><b>Cán bộ coi thi</b></TdCenter>
-                            <TdCenter>Hà Nội, ngày ..... tháng ..... năm 2019</TdCenter>
-                        </tr>
-                        <tr>
-                            <TdCenter><i>(Ký và ghi rõ họ tên)</i></TdCenter>
-                            <TdCenter><b>XÁC NHẬN CỦA PHÒNG ĐÀO TẠO</b></TdCenter>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <TdCenter><b>Cán bộ coi thi</b></TdCenter>
+                                <TdCenter>Hà Nội, ngày ..... tháng ..... năm 2019</TdCenter>
+                            </tr>
+                            <tr>
+                                <TdCenter><i>(Ký và ghi rõ họ tên)</i></TdCenter>
+                                <TdCenter><b>XÁC NHẬN CỦA PHÒNG ĐÀO TẠO</b></TdCenter>
+                            </tr>
+                        </tbody>
                     </Table>
                 </Main>
                 <Actions>

@@ -23,6 +23,7 @@ type Shift {
  }
  extend type Mutation {
     createNewShift(input: createNewShiftInput): Shift
+    deleteShift(id: String): Shift
  }
 `
 module.exports = Shift

@@ -95,7 +95,12 @@ const DeleteUserModal = () => {
                     </Wrapper>
                     <Actions>
                         <WarnButton onClick={() => close()}>Hủy</WarnButton>
-                        <PrimaryButton onClick={updateModule} disabled={!inputModuleId || !inputName}>{loading ? 'Cập nhật ...' : 'Cập nhật'}</PrimaryButton>
+                        <PrimaryButton onClick={updateModule} disabled={
+                            !inputModuleId ||
+                            !inputName ||
+                            inputName == name &&
+                            inputModuleId == moduleId
+                        }>{loading ? 'Cập nhật ...' : 'Cập nhật'}</PrimaryButton>
                     </Actions>
                 </form>
             </ModalContainer>
