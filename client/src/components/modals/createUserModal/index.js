@@ -19,6 +19,8 @@ const CreateUserModal = () => {
 
     const isOpen = useSelector(state => state.modals.isOpen)
 
+    const style = modalStyles();
+
     const close = () => dispatch(closeModal());
 
     const [createUser, { error, loading }] = useMutation(
@@ -32,6 +34,7 @@ const CreateUserModal = () => {
     const [inputStudentId, setInputStudentId] = useState('')
     const [inputProgram, setInputProgram] = useState('')
     const [inputSchoolYear, setInputSchoolYear] = useState('')
+
     const [nameError, setNameError] = useState(false)
     const [emailError, setEmailError] = useState(false)
     const [validEmailError, setValidEmailError] = useState(false)
@@ -78,17 +81,26 @@ const CreateUserModal = () => {
         setSchoolYearError(false)
     };
 
-    const DEFAULT_USER_PASSWORD = '12345678'
-
     const handleCreateUser = async () => {
+        
         if (!inputName || inputName.length === 0) { return setNameError(true) }
+        
         if (!inputEmail || inputEmail.length === 0) { return setEmailError(true) }
+        
         if (!isEmail(inputEmail)) { return setValidEmailError(true) }
+        
         if (!inputDob || inputDob.length === 0) { return setDobError(true) }
+        
         if (!inputStudentId || inputStudentId.length === 0) { return setStudentIdError(true) }
+        
         if (isNaN(inputStudentId)) { return setIntergerError(true) }
+        
         if (!inputProgram || inputProgram.length === 0) { return setProgramError(true) }
+        
         if (!inputSchoolYear || inputSchoolYear.length === 0) { return setSchoolYearError(true) }
+
+        const DEFAULT_USER_PASSWORD = '12345678'
+        
         await createUser({
             variables: {
                 name: inputName,
@@ -102,8 +114,6 @@ const CreateUserModal = () => {
         });
         dispatch(closeModal())
     }
-
-    const style = modalStyles();
 
     return (
         <div>

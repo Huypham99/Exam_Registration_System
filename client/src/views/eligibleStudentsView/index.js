@@ -28,15 +28,6 @@ const EligibleStudents = () => {
         dispatch(openModal('DELETE_STUDENT_MODULE_MODAL'))
     }
 
-    const editEligibleStudent = (props) => {
-        // const { name, email, dob, studentId, program, schoolYear } = props.row
-        // dispatch(setUser(name, email, dob, studentId, program, schoolYear))
-        // dispatch(openModal('EDIT_USER_MODAL'))
-        return;
-    }
-
-
-
     const columns = [{
         id: 'studentId',
         Header: 'Mã SV',
@@ -75,7 +66,6 @@ const EligibleStudents = () => {
         Header: 'Edit',
         Cell: (props) => (
             <TableActions
-                editFunc={() => editEligibleStudent(props)}
                 deleteFunc={() => deleteEligibleStudent(props)}
             />
         ),
@@ -90,7 +80,8 @@ const EligibleStudents = () => {
             isLoading={loading}
             columns={columns}
             isExcel={true}
-            title="Eligible Students List"
+            isCreateNew={false}
+            title="Danh sách sinh viên đủ điều kiện"
             api="excel/eligible-students"
         />
     )

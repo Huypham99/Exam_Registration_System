@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import theme from '../../shared/theme';
-import { Transition, hexa, zIndex } from '../globals';
+import { Transition, hexa } from '../globals';
 import Textarea from 'react-textarea-autosize';
 
 export const StyledLabel = styled.label`
@@ -105,7 +105,7 @@ export const InputOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: ${zIndex.form + 2};
+  z-index: 1000;
   top: 0;
   right: 0;
   bottom: 0;

@@ -71,44 +71,6 @@ export const Transition = {
   },
 };
 
-export const zIndex = new function () {
-  // Write down a camel-cased element descriptor as the name (e.g. modal or chatInput).
-  // Define at a component level here, then use math to handle order at a local level.
-  // (e.g. const ModalInput = styled.input`z-index: zIndex.modal + 1`;)
-  // This uses constructor syntax because that allows self-referential math
-
-  this.base = 1; // z-index: auto content will go here or inherit z-index from a parent
-
-  this.background = this.base - 1; // content that should always be behind other things (e.g. textures/illos)
-  this.hidden = this.base - 2; // this content should be hidden completely (USE ADD'L MEANS OF HIDING)
-
-  this.card = this.base + 1; // all cards should default to one layer above the base content
-  this.loading = this.card + 1; // loading elements should never appear behind cards
-  this.avatar = this.card + 1; // avatars should never appear behind cards
-  this.form = this.card + 1; // form elements should never appear behind cards
-  this.search = this.form; // search is a type of form and should appear at the same level
-  this.dmInput = this.form;
-
-  this.composerToolbar = 2000; // composer toolbar - should sit in between most elements
-
-  this.chrome = 3000; // chrome should be visible in modal contexts
-  this.navBar = this.chrome; // navBar is chrome and should appear at the same level
-  this.mobileInput = this.chrome + 1; // the chatInput on mobile should appear above the navBar
-  this.dropDown = this.chrome + 1; // dropDowns shouldn't appear behind the navBar
-
-  this.slider = window.innerWidth < 768 ? this.chrome + 1 : this.chrome; // slider should appear significantly above the base to leave room for other elements
-  this.composer = 4000; // should cover all screen except toasts
-  this.chatInput = this.slider + 1; // the slider chatInput should always appear above the slider
-  this.flyout = this.chatInput + 3; // flyout may overlap with chatInput and should take precedence
-
-  this.fullscreen = 4000; // fullscreen elements should cover all screen content except toasts
-
-  this.modal = 5000; // modals should completely cover base content and slider as well
-  this.gallery = this.modal + 1; // gallery should never appear behind a modal
-
-  this.toast = 6000; // toasts should be visible in every context
-  this.tooltip = this.toast + 1; // tooltips should always be on top
-}();
 
 export const fontStack = css`
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica', 'Segoe',
@@ -122,38 +84,6 @@ export const monoStack = css`
 export const boxShadow = css`
   box-shadow: 0 1px 15px rgba(27,31,35,.15);
 `
-
-const spin = keyframes`
-  to {transform: rotate(360deg);}
-`;
-
-export const Spinner = styled.span`
-  width: ${props => (props.size ? `${props.size}px` : '32px')};
-  height: ${props => (props.size ? `${props.size}px` : '32px')};
-  &:before {
-    content: '';
-    box-sizing: border-box;
-    display: inline-block;
-    position: ${props => (props.inline ? 'relative' : 'absolute')};
-    top: ${props => (props.inline ? '0' : '50%')};
-    left: ${props => (props.inline ? '0' : '50%')};
-    width: ${props => (props.size !== undefined ? `${props.size}px` : '16px')};
-    height: ${props => (props.size !== undefined ? `${props.size}px` : '16px')};
-    margin-top: ${props =>
-    props.size !== undefined ? `-${props.size / 2}px` : '-8px'};
-    margin-left: ${props =>
-    props.size !== undefined ? `-${props.size / 2}px` : '-8px'};
-    border-radius: 50%;
-    border: 2px solid
-      ${props =>
-    props.color
-      ? eval(`props.theme.${props.color}`)
-      : theme.brand.black};
-    border-top-color: transparent;
-    animation: ${spin} 1.5s linear infinite;
-  }
-`;
-
 export const Label = styled.label`
   display: flex;
   flex-direction: column;
@@ -366,62 +296,3 @@ export const FlexCol = styled.div`
   align-items: stretch;
 `;
 
-export const Onboarding = props => css`
-  position: relative;
-  &:after,
-  &:before {
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    position: absolute;
-    opacity: 0;
-    display: block;
-  }
-  &:before {
-    content: '';
-    z-index: ${zIndex.tooltip + 1};
-    border: 5px solid transparent;
-  }
-  &:after {
-    content: ${props.onboarding ? `'${props.onboarding}'` : "''"};
-    z-index: ${zIndex.tooltip};
-    ${fontStack};
-    text-align: left;
-    line-height: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    width: 300px;
-    white-space: normal;
-    overflow: hidden;
-    padding: 16px;
-    padding-left: 20px;
-    border-radius: 12px;
-    background-color: ${props.theme.bg.default};
-    background: ${props.theme.bg.default} url(/img/goopy-top.svg) center top
-      no-repeat;
-    background-size: 100%;
-    color: ${props.theme.text.default};
-    box-shadow: 0 8px 32px rgba(23, 26, 33, 0.35);
-  }
-  &:after,
-  &:before {
-    opacity: 1;
-    transition: opacity 0.1s ease-in 0.1s;
-  }
-`;
-
-export const HorizontalRule = styled(FlexRow)`
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  align-self: stretch;
-  color: ${theme.bg.border};
-  hr {
-    display: inline-block;
-    flex: 1 0 auto;
-    border-top: 1px solid ${theme.bg.border};
-  }
-  div {
-    margin: 0 16px;
-  }
-`;

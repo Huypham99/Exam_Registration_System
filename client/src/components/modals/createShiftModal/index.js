@@ -22,10 +22,11 @@ const CreateShiftModal = () => {
     const isOpen = useSelector(state => state.modals.isOpen)
     const examId = useSelector(state => state.exam.examId)
 
+    const style = modalStyles();
+
     const close = () => dispatch(closeModal());
 
-    const { networkStatus, data } = useQuery(getAllModulesQuery);
-    //const isLoading = networkStatus === 1 || networkStatus === 2;
+    const { data } = useQuery(getAllModulesQuery)
 
     const [createShift, { loading }] = useMutation(
         createShiftMutation, {
@@ -35,12 +36,11 @@ const CreateShiftModal = () => {
     }
     );
 
-    const style = modalStyles();
-
     const [inputTime, setInputTime] = useState('')
     const [inputDate, setInputDate] = useState('')
     const [inputDayOfWeek, setInputDayOfWeek] = useState('')
     const [inputModule, setInputModule] = useState('')
+
     const [timeError, setTimeError] = useState(false)
     const [dateError, setDateError] = useState(false)
     const [dayOfWeekError, setDayOfWeekError] = useState(false)
@@ -72,10 +72,15 @@ const CreateShiftModal = () => {
     };
 
     const handleCreateShift = async () => {
+     
         if (!inputDate || inputDate.length === 0) { return setDateError(true) }
+     
         if (!inputTime || inputTime.length === 0) { return setTimeError(true) }
+     
         if (!inputDayOfWeek || inputDayOfWeek.length === 0) { return setDayOfWeekError(true) }
+     
         if (!inputModule || inputModule.length === 0) { return setModuleError(true) }
+     
         await createShift({
             variables: {
                 time: inputTime,
@@ -85,6 +90,7 @@ const CreateShiftModal = () => {
                 examId: examId
             }
         })
+        
         dispatch(openModal('ADD_HALL_MODAL'))
     }
 
@@ -130,11 +136,13 @@ const CreateShiftModal = () => {
                             {timeError ? <Error>Thời gian không được để trống</Error> : ''}
                             <Label>
                                 Học phần
-                            <Select onChange={changeModule}>
+                                <Select onChange={changeModule}>
                                     <option value="" selected disabled hidden>Chọn học phần</option>
-                                    {data && data.getAllModules.map(module => (
-                                        <option>{`${module.name}-${module.moduleId}`}</option>
-                                    ))}
+                                    {
+                                        data && data.getAllModules.map(module => (
+                                            <option>{`${module.name}-${module.moduleId}`}</option>
+                                        ))
+                                    }
                                 </Select>
                             </Label>
                             {moduleError && <Error>Vui lòng chọn học phần cho ca thi !!</Error>}

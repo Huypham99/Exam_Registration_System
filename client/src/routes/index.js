@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { ProtectedRoute } from '../../src/components/authentication/protectedRoute'
 import AdminDashboard from '../../src/views/adminDashboard'
 import UserDashboard from '../../src/views/userDashboard'
-import AuthenticatedComponent from '../components/authentication'
 import AppViewWrapper from '../../src/components/appViewWrapper'
 import LogIn from '../../src/views/login'
 import Navigation from '../../src/views/navigation'
@@ -16,7 +14,6 @@ import EligibleStudents from '../views/eligibleStudentsView'
 import ExamListView from '../views/examListView'
 import ExamDetailView from '../views/examDetailView'
 import ExamRegistrationView from '../views/examRegistrationView'
-import RegisteredShifts from '../views/registeredShiftView'
 import UserSetting from '../views/userSetting'
 import { ViewGrid } from '../components/layout'
 import ModalRoot from '../components/modals/modalRoot'
@@ -34,46 +31,54 @@ const Routes = () => {
     const isAdmin = data && data.getCurrentUser.isAdmin
 
     const StudentsListFallback = SignedOutFallback(StudentsList, () => <Redirect to='/login' />);
+
     const PrintExamFallback = SignedOutFallback(PrintExam, () => <Redirect to='/login' />);
+
     const ModulesListFallback = SignedOutFallback(ModulesList, () => <Redirect to='/login' />);
+
     const IneligibleStudentsFallback = SignedOutFallback(IneligibleStudents, () => <Redirect to='/login' />);
+
     const EligibleStudentsFallback = SignedOutFallback(EligibleStudents, () => <Redirect to='/login' />);
+
     const ExamListViewFallback = SignedOutFallback(ExamListView, () => <Redirect to='/login' />);
+
     const ExamDetailViewFallback = SignedOutFallback(ExamDetailView, () => <Redirect to='/login' />);
+
     const ExamRegistrationViewFallback = SignedOutFallback(ExamRegistrationView, () => <Redirect to='/login' />);
-    const RegisteredShiftsFallback = SignedOutFallback(RegisteredShifts, () => <Redirect to='/login' />);
+
     const HallsListFallback = SignedOutFallback(HallsList, () => <Redirect to='/login' />);
+
     const AdminDashboardFallback = SignedOutFallback(AdminDashboard, () => <Redirect to='/login' />);
+
     const UserSettingFallback = SignedOutFallback(UserSetting, () => <Redirect to='/login' />);
+
     const UserDashboardFallback = SignedOutFallback(UserDashboard, () => <Redirect to='/login' />);
-    const LogInFallback = SignedOutFallback(() => <Redirect to='/dashboard' />, LogIn);
+
+    const LogInFallback = SignedOutFallback(() => <Redirect to='/exams' />, LogIn);
 
 
     return (
         <Router>
             <AppViewWrapper>
                 <Route component={Navigation} />
-                <ModalRoot />
                 <Switch>
                     <Route path='/login' component={LogInFallback} />
-                    <AuthenticatedComponent>
-                        {
-                            <ViewGrid>
-                                <Route path='/dashboard' exact component={isAdmin ? AdminDashboardFallback : UserDashboardFallback} />
-                                <Route path='/print' component={PrintExamFallback} />
-                                <Route path='/students' component={StudentsListFallback} />
-                                <Route path='/modules' component={ModulesListFallback} />
-                                <Route path='/ineligible' component={IneligibleStudentsFallback} />
-                                <Route path='/eligible' component={EligibleStudentsFallback} />
-                                <Route path='/exams' component={ExamListViewFallback} />
-                                <Route path='/halls' component={HallsListFallback} />
-                                <Route path='/exam/:examId' component={ExamDetailViewFallback} />
-                                <Route path='/exam_registration/:examId' component={ExamRegistrationViewFallback} />
-                                <Route path='/registered' component={RegisteredShiftsFallback} />
-                                <Route path='/setting' component={UserSettingFallback} />
-                            </ViewGrid>
-                        }
-                    </AuthenticatedComponent>
+                    {
+                        <ViewGrid>
+                            <ModalRoot />
+                            <Route path='/dashboard' exact component={isAdmin ? AdminDashboardFallback : UserDashboardFallback} />
+                            <Route path='/print' component={!isAdmin ? PrintExamFallback : () => <Redirect to='/login' />} />
+                            <Route path='/students' component={isAdmin ? StudentsListFallback : () => <Redirect to='/login' />} />
+                            <Route path='/modules' component={isAdmin ? ModulesListFallback : () => <Redirect to='/login' />} />
+                            <Route path='/ineligible' component={isAdmin ? IneligibleStudentsFallback : () => <Redirect to='/login' />} />
+                            <Route path='/eligible' component={isAdmin ? EligibleStudentsFallback : () => <Redirect to='/login' />} />
+                            <Route path='/halls' component={isAdmin ? HallsListFallback : () => <Redirect to='/login' />} />
+                            <Route path='/exams' component={ExamListViewFallback} />
+                            <Route path='/exam/:examId' component={ExamDetailViewFallback} />
+                            <Route path='/exam_registration/:examId' component={ExamRegistrationViewFallback} />
+                            <Route path='/setting' component={UserSettingFallback} />
+                        </ViewGrid>
+                    }
                 </Switch>
             </AppViewWrapper>
         </Router>

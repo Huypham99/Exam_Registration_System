@@ -16,6 +16,12 @@ import { withCurrentUser } from '../../withCurrentUser'
 
 const SelectShiftHallModal = (props) => {
 
+    const dispatch = useDispatch()
+
+    const style = modalStyles()
+
+    const close = () => dispatch(closeModal())
+
     const { currentUser } = props
     const isOpen = useSelector(state => state.modals.isOpen)
     const id = useSelector(state => state.shift.shiftId)
@@ -23,26 +29,23 @@ const SelectShiftHallModal = (props) => {
 
     const [selected, setSelected] = useState(null)
     const [hovered, setHovered] = useState(false)
+    const [oneHallSelected, setOneHallSelected] = useState(false)
+
+    // State store a variable to refetch a query
     const [hallIndex, setHallIndex] = useState(null)
-    const [oneItemSelected, setOneItemSelected] = useState(false)
-    const [abc, setAbc] = useState(null)
 
     const onMouseOver = () => setHovered(true)
     const onMouseLeave = () => setHovered(false)
 
-    const dispatch = useDispatch()
-
-    const style = modalStyles()
-
-    const close = () => dispatch(closeModal())
-
     const { data: shift } = useQuery(
-        getShiftByIdQuery, 
+        getShiftByIdQuery,
         { variables: { id: id } }
     )
 
+    const hallsOfShift = shift && shift.getShiftById.halls
+
     const { data: student_shift, loading: student_shift_loading } = useQuery(
-        getStudentShiftByStudentIdQuery, 
+        getStudentShiftByStudentIdQuery,
         { variables: { studentId: currentUser.id } }
     )
 
@@ -72,26 +75,50 @@ const SelectShiftHallModal = (props) => {
         }
     )
 
-    
+
     let hallIdList = [];
 
-    // Check if user has already registered this shifts
-    const hasRegistered = (shiftHallId) => (student_shift && student_shift.getStudentShiftByStudentId.filter(data => data.shiftHall.id == shiftHallId).length !== 0)
+    // Check if user has already registered 
+    const hasRegistered = (shiftHallId) => {
+        const registeredShift = student_shift && student_shift.getStudentShiftByStudentId
+        return registeredShift.filter(data => data.shiftHall.id == shiftHallId).length !== 0
+    }
 
     const handleRegister = async (shiftHallId, hallId) => (
+
+        // Set hallId state to refetch a query
         await setHallIndex(shiftHallId),
-        await createStudentShift({ variables: { shiftHallId: shiftHallId, studentId: studentId } }),
+
+        // Register a shift
+        await createStudentShift({
+            variables: {
+                shiftHallId: shiftHallId,
+                studentId: currentUser.id
+            }
+        }),
+
         setSelected(hallId),
-        setOneItemSelected(true)
+
+        setOneHallSelected(true)
     )
 
     const handleCancel = async (shiftHallId, hallId) => (
-        await setHallIndex(shiftHallId),
-        await deleteStudentShift({ variables: { shiftHallId: shiftHallId, studentId: studentId } }),
-        setSelected(null),
-        setOneItemSelected(false)
-    )
 
+        // Set hallId state to refetch a query
+        await setHallIndex(shiftHallId),
+
+        // Unregister shift
+        await deleteStudentShift({
+            variables: {
+                shiftHallId: shiftHallId,
+                studentId: currentUser.id
+            }
+        }),
+
+        setSelected(null),
+
+        setOneHallSelected(false)
+    )
 
     return (
         <Modal
@@ -112,30 +139,34 @@ const SelectShiftHallModal = (props) => {
                                 <Th>Chọn</Th>
                             </tr>
                         </thead>
-                        {shift && shift.getShiftById.halls.map(shiftHall => (
+                        {hallsOfShift.map(shiftHall => (
+
                             <Query query={getRegisterStudentsQuery} variables={{ shiftHallId: shiftHall.id }}>
                                 {({ data }) => {
-                                    const registeredStudents = data && data.getStudentShiftByShiftHallId.length
+
+                                    const numberOfRegisteredStudents = data && data.getStudentShiftByShiftHallId.length
+
                                     const { id, name, capacity } = shiftHall.hallDetail
+
                                     return (
                                         <tbody>
                                             <Tr
                                                 capacity={capacity}
-                                                registered={registeredStudents}
+                                                registered={numberOfRegisteredStudents}
                                             >
                                                 <Td>{name}</Td>
                                                 <Td>{capacity}</Td>
-                                                <Td>{registeredStudents}</Td>
+                                                <Td>{numberOfRegisteredStudents}</Td>
                                                 <Td>
                                                     <IconWrapper>
                                                         <PrimaryButton
                                                             onMouseOver={onMouseOver}
                                                             onMouseLeave={onMouseLeave}
-                                                            onClick={() =>
-                                                                hasRegistered(shiftHall.id) ? handleCancel(shiftHall.id, id) : (registeredStudents == capacity) ? alert('Không còn đủ chỗ, vui lòng chọn phòng thi khác !!') : handleRegister(shiftHall.id, id)}
-                                                            disabled={!oneItemSelected || hasRegistered(shiftHall.id) ? false : true}
+                                                            onClick={() => hasRegistered(shiftHall.id) ? handleCancel(shiftHall.id, id) : handleRegister(shiftHall.id, id)}
+                                                            disabled={!oneHallSelected || hasRegistered(shiftHall.id) ? false : true}
+                                                            isHide={!hasRegistered(shiftHall.id) && (numberOfRegisteredStudents == capacity)}
                                                         >
-                                                            {(hasRegistered(shiftHall.id ))
+                                                            {(hasRegistered(shiftHall.id))
                                                                 ? (hovered
                                                                     ? (cancelLoading || student_shift_loading ? 'Hủy...' : 'Hủy')
                                                                     : 'Đã chọn'

@@ -66,6 +66,7 @@ const HallsList = () => {
             isLoading={loading}
             columns={columns}
             title="Danh sách phòng thi"
+            isCreateNew={true}
             createFunc={() => createHall()}
         />
     )

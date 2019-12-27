@@ -91,14 +91,5 @@ export const Message = styled.div`
   }
 `;
 
-export const CloseButton = styled(Icon)`
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  color: ${theme.text.placeholder};
-  &:hover {
-    color: ${theme.warn.alt};
-  }
-`;
 
 

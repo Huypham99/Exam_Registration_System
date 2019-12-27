@@ -17,6 +17,10 @@ const EditUserModal = () => {
 
     const isOpen = useSelector(state => state.modals.isOpen)
 
+    const close = () => dispatch(closeModal());
+
+    const style = modalStyles();
+
     const [editUser, { loading, error }] = useMutation(
         editUserMutation,
         { refetchQueries: [{ query: getAllUsers }] }
@@ -24,17 +28,15 @@ const EditUserModal = () => {
 
     const { name, email, dob, studentId, program, schoolYear } = useSelector(state => state.user)
 
-    const close = () => dispatch(closeModal());
-
-    const style = modalStyles();
-
-    //handle input changes
+    // Input state
     const [inputName, setInputName] = useState(name)
     const [inputEmail, setInputEmail] = useState(email)
     const [inputDob, setInputDob] = useState(dob)
     const [inputStudentId, setInputStudentId] = useState(studentId)
     const [inputProgram, setInputProgram] = useState(program)
     const [inputSchoolYear, setInputSchoolYear] = useState(schoolYear)
+
+    // Error state
     const [nameError, setNameError] = useState(false)
     const [emailError, setEmailError] = useState(false)
     const [validEmailError, setValidEmailError] = useState(false)
@@ -117,9 +119,11 @@ const EditUserModal = () => {
     };
 
     const updateUser = async () => {
+
         if (!isEmail(inputEmail)) {
             return setValidEmailError(true);
         }
+
         await editUser({
             variables: {
                 studentId: parseInt(studentId),
@@ -132,6 +136,7 @@ const EditUserModal = () => {
                 newSchoolYear: inputSchoolYear
             }
         })
+       
         dispatch(closeModal())
     }
 
@@ -156,7 +161,7 @@ const EditUserModal = () => {
                         </Input>
                         {nameError ? <Error>Họ tên không được để trống</Error> : ''}
                         <Input
-                            type="email"
+                            inputType="email"
                             defaultValue={inputEmail}
                             onChange={changeEmail}
                         >
@@ -165,7 +170,7 @@ const EditUserModal = () => {
                         {emailError ? <Error>Email không được để trống</Error> : ''}
                         {validEmailError ? <Error>Email không hợp lệ</Error> : ''}
                         <Input
-                            type="date"
+                            inputType="date"
                             defaultValue={inputDob}
                             onChange={changeDob}
                         >

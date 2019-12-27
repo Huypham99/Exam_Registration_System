@@ -1,11 +1,10 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import Table from '../../components/table'
 import { TableHeader, TableCell } from '../../components/globals'
 import TableActions from '../../components/tableActions'
 import { useQuery } from '@apollo/react-hooks';
 import { getAllUsers } from '../../graphql/queries/user/getUser'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../actions/userInfor';
 import { openModal } from '../../actions/modals';
 
@@ -14,6 +13,10 @@ const StudentsList = () => {
     const { loading, data } = useQuery(getAllUsers);
 
     const dispatch = useDispatch();
+
+    const reRenderState = useSelector(state => state.examDetailRender.reRender)
+
+    const [reRender, setReRender] = useState(null)
 
     const style = TableCell;
 
@@ -42,7 +45,7 @@ const StudentsList = () => {
         headerStyle: headerStyle,
         minWidth: 100,
     }, {
-        Header: 'Email',
+        Header: 'VNU Email',
         accessor: 'email',
         style: style,
         headerStyle: headerStyle,
@@ -53,11 +56,11 @@ const StudentsList = () => {
         headerStyle: headerStyle,
         minWidth: 70,
     }, {
-        Header: 'Mã Sinh Viên',
+        Header: 'Mã SV',
         accessor: 'studentId',
         style: style,
         headerStyle: headerStyle,
-        minWidth: 70,
+        minWidth: 50,
     }, {
         Header: 'Chương Trình Học',
         accessor: 'program',
@@ -68,7 +71,7 @@ const StudentsList = () => {
         accessor: 'schoolYear',
         style: style,
         headerStyle: headerStyle,
-        minWidth: 60,
+        minWidth: 100,
     }, {
         Header: 'Edit',
         Cell: (props) => (
@@ -89,6 +92,7 @@ const StudentsList = () => {
             columns={columns}
             title="Danh sách sinh viên"
             isExcel={true}
+            isCreateNew={true}
             api="excel/students"
             createFunc={() => createUser()}
         />

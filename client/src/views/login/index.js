@@ -3,7 +3,6 @@ import { Input, Error } from '../../components/formElements/index'
 import { Wrapper, Form, BtnWarapper, Title } from './style'
 import { withRouter } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks';
-import { logInMutation } from '../../graphql/mutations/user/logIn'
 import { PrimaryButton } from '../../components/button/index'
 import axios from 'axios';
 
@@ -14,9 +13,7 @@ const LogIn = (props) => {
     const [usernameError, setUsernameError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const [serverError, setServerError] = useState('')
-
-    const [logIn, { error }] = useMutation(logInMutation)
-
+    const [loading, setLoading] = useState(false)
 
     const changeUsername = e => {
         let username = e.target.value;
@@ -30,16 +27,35 @@ const LogIn = (props) => {
         setPasswordError(false)
     };
 
-    const submit = async e => {
+    const handleLogin = (e) => {
+
+        e.preventDefault()
+
         if (!password || password.length === 0) {
             setPasswordError(true)
         }
         if (!username || username.length === 0) {
             setUsernameError(true)
         }
+
         if ((password || password.length !== 0) && (username || username.length !== 0)) {
-            await logIn({ variables: { userName: username, password: password } })
-            props.history.push('/dashboard')
+
+            setLoading(true)
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:4000/auth/login',
+                withCredentials: true,
+                data: { userName: username, password: password }
+            }).then(function (response) {
+                if (response) {
+                    setLoading(false)
+                    return props.history.push('/exams')
+                }
+            }).catch((error) => {
+                setServerError(error.response.data.error)
+                setLoading(false)
+            })
         }
     }
 
@@ -49,23 +65,23 @@ const LogIn = (props) => {
                 Đăng nhập hệ thống
             </Title>
             <Form>
-                {error && <Error>{error.message}</Error>}
+                {serverError && <Error>{serverError}</Error>}
                 <Input
                     type="text"
                     defaultValue={username}
                     onChange={changeUsername}
                     placeholder={'username'}
-                >Username</Input>
-                {usernameError ? <Error>Username can not be blank</Error> : ''}
+                >Tên truy cập</Input>
+                {usernameError ? <Error>Tên truy cập không được để trống</Error> : ''}
                 <Input
                     inputType="password"
                     defaultValue={password}
                     onChange={changePassword}
                     placeholder={'password'}
-                >Password</Input>
-                {passwordError ? <Error>Password can not be blank</Error> : ''}
+                >Mật khẩu</Input>
+                {passwordError ? <Error>Mật khẩu không được để trống</Error> : ''}
                 <BtnWarapper>
-                    <PrimaryButton onClick={submit} target='_self'>Login</PrimaryButton>
+                    <PrimaryButton onClick={handleLogin} target='_self'>{loading ? 'Đăng nhập...' : 'Đăng nhập'}</PrimaryButton>
                 </BtnWarapper>
             </Form>
         </Wrapper>

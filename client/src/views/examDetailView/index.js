@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks'
 import { getExamByIdQuery } from '../../graphql/queries/exam/getExam'
 import Table from '../../components/table'
 import { Link } from 'react-router-dom'
 import { TableHeader, TableCell } from '../../components/globals'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { openModal } from '../../actions/modals';
 import { setExamId } from '../../actions/examInfor';
 import { withRouter } from 'react-router-dom'
-import { PrimaryButton } from '../../components/button'
+import { PrimaryButton, WarnButton } from '../../components/button'
 import { setShiftId, setShiftInfor } from '../../actions/shiftInfor'
-import { from } from 'zen-observable';
 
 const ExamDetailStudent = (props) => {
 
     const id = props.match.params.examId;
-
+    
     const { loading, data } = useQuery(getExamByIdQuery, { variables: { id: id } });
 
     const style = TableCell;
@@ -85,7 +84,7 @@ const ExamDetailStudent = (props) => {
             ),
             style: style,
             headerStyle: headerStyle,
-            minWidth: 130,
+            minWidth: 50,
         }]
 
     return (

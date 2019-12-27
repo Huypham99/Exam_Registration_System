@@ -31,6 +31,7 @@ const DeleteUserModal = () => {
 
     const [inputName, setInputName] = useState(name)
     const [inputModuleId, setInputModuleId] = useState(moduleId)
+    
     const [nameError, setNameError] = useState(false)
     const [moduleIdError, setModuleIdError] = useState(false)
     const [intergerError, setIntergerError] = useState(false)

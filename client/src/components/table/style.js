@@ -30,11 +30,10 @@ export const CreateButton = styled.div`
     max-width: 200px;
 `
 export const Main = styled.div`
-    margin: 20px 0;
     height: auto;
     background: ${theme.bg.default};
     border: solid 1px ${theme.bg.border};
     border-radius: 5px;
-    padding: 20px 20px;
+    padding: 0 20px;
     ${fontStack}
 `

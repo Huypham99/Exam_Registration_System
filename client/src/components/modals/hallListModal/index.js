@@ -14,14 +14,14 @@ import { Table, Td, Th, IconWrapper } from './style'
 import { withCurrentUser } from '../../withCurrentUser'
 
 const HallListModal = (props) => {
-   
+
     const { currentUser } = props
 
     const isOpen = useSelector(state => state.modals.isOpen);
     const id = useSelector(state => state.shift.id);
 
     // Array stores list of registered student of each hall
-    const students = []
+    const registerStudents = []
 
     const dispatch = useDispatch()
 
@@ -30,7 +30,13 @@ const HallListModal = (props) => {
     const close = () => dispatch(closeModal())
 
     const { data: shift } = useQuery(getShiftByIdQuery, { variables: { id: id } })
-    
+
+    const handleClick = (studentShift) => (
+        studentShift.map(data => registerStudents.push(data.student)),
+        dispatch(setStudentsList(registerStudents)),
+        dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
+    )
+
     return (
         <Modal
             ariaHideApp={false}
@@ -60,12 +66,8 @@ const HallListModal = (props) => {
                                             <Td>{data && data.getStudentShiftByShiftHallId.length}</Td>
                                             <Td>
                                                 <IconWrapper>
-                                                    <PrimaryButton onClick={() => (
-                                                        data && data.getStudentShiftByShiftHallId.map(data => students.push(data.student)),
-                                                        dispatch(setStudentsList(students)),
-                                                        dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
-                                                    )}
-                                                    disabled={data && data.getStudentShiftByShiftHallId.length === 0}
+                                                    <PrimaryButton onClick={() => handleClick(data && data.getStudentShiftByShiftHallId)}
+                                                        disabled={data && data.getStudentShiftByShiftHallId.length === 0}
                                                     >Xem</PrimaryButton>
                                                 </IconWrapper>
                                             </Td>

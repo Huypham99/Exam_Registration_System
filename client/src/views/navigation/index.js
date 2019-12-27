@@ -52,21 +52,6 @@ const Navigation = (props) => {
             return (
                 <NavigationWrapper>
                     <NavigationGrid>
-                        <Route path='/dashboard'>
-                            {({ match }) => (
-                                <AvatarGrid isActive={!!match}>
-                                    <AvatarLink
-                                        to={'/dashboard'}
-                                    >
-                                        <IconWrapper>
-                                            <Icon glyph="document" size='26' />
-                                        </IconWrapper>
-
-                                        <Label>Dashboard</Label>
-                                    </AvatarLink>
-                                </AvatarGrid>
-                            )}
-                        </Route>
                         <Route path='/exams'>
                             {({ match }) => (
                                 <AvatarGrid isActive={!!match}>
@@ -89,7 +74,7 @@ const Navigation = (props) => {
                                         to={'/students'}
                                     >
                                         <IconWrapper>
-                                            <Icon glyph="document" size='26' />
+                                            <Icon glyph="users" size='26' />
                                         </IconWrapper>
 
                                         <Label>Students</Label>
@@ -104,7 +89,7 @@ const Navigation = (props) => {
                                         to={'/modules'}
                                     >
                                         <IconWrapper>
-                                            <Icon glyph="document" size='26' />
+                                            <Icon glyph="modules" size='26' />
                                         </IconWrapper>
 
                                         <Label>Modules</Label>
@@ -119,7 +104,7 @@ const Navigation = (props) => {
                                         to={'/halls'}
                                     >
                                         <IconWrapper>
-                                            <Icon glyph="document" size='26' />
+                                            <Icon glyph="halls" size='26' />
                                         </IconWrapper>
 
                                         <Label>Lecture Halls</Label>
@@ -134,7 +119,7 @@ const Navigation = (props) => {
                                         to={'/eligible'}
                                     >
                                         <IconWrapper>
-                                            <Icon glyph="document" size='26' />
+                                            <Icon glyph="eligible" size='26' />
                                         </IconWrapper>
 
                                         <Label>Eligible</Label>
@@ -149,7 +134,7 @@ const Navigation = (props) => {
                                         to={'/ineligible'}
                                     >
                                         <IconWrapper>
-                                            <Icon glyph="document" size='26' />
+                                            <Icon glyph="ineligible" size='26' />
                                         </IconWrapper>
 
                                         <Label>Ineligible</Label>
@@ -158,24 +143,24 @@ const Navigation = (props) => {
                             )}
                         </Route>
                         <Divider />
-                        <Route path='/aa'>
+                        <Route path='/setting'>
                             {({ match }) => (
                                 <AvatarGrid isActive={!!match}>
                                     <AvatarLink
-                                        to={'/aa'}
+                                        to={'/setting'}
                                     >
                                         <IconWrapper>
                                             <Icon glyph="user" size='27' />
                                         </IconWrapper>
 
-                                        <Label>{currentUser && currentUser.studentId}</Label>
+                                        <Label>Admin</Label>
                                     </AvatarLink>
                                 </AvatarGrid>
                             )}
                         </Route>
                         <Divider />
                         <ActionsRowContainer>
-                            <PrimaryButton href={'http://localhost:4000/auth/logout'} target="_self">logout</PrimaryButton>
+                            <PrimaryButton href={'http://localhost:4000/auth/logout'} target="_self">Đăng xuất</PrimaryButton>
                         </ActionsRowContainer>
                     </NavigationGrid>
                 </NavigationWrapper>
@@ -196,21 +181,6 @@ const Navigation = (props) => {
                                         </IconWrapper>
 
                                         <Label>Đăng kí thi</Label>
-                                    </AvatarLink>
-                                </AvatarGrid>
-                            )}
-                        </Route>
-                        <Route path='/registered'>
-                            {({ match }) => (
-                                <AvatarGrid isActive={!!match}>
-                                    <AvatarLink
-                                        to={'/registered'}
-                                    >
-                                        <IconWrapper>
-                                            <Icon glyph="register" size='26' />
-                                        </IconWrapper>
-
-                                        <Label>Danh sách</Label>
                                     </AvatarLink>
                                 </AvatarGrid>
                             )}

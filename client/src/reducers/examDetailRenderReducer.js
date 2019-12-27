@@ -1,12 +1,12 @@
 const initialState = {
-    id: null,
+    reRender: false,
 };
 
 export default function userInfor(state = initialState, action) {
     switch (action.type) {
-        case 'SET_SHIFT_HALL_ID':
+        case 'SET_EXAM_DETAIL_RENDER':
             return {
-                id: action.shiftHallId,
+                reRender: action.state,
             }
         default:
             return state;

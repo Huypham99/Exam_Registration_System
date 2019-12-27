@@ -14,17 +14,23 @@ const PrintRegStudentsModal = () => {
 
     const studentId = useSelector(state => state.id)
     const students = useSelector(state => state.studentsList.list)
-    const { date, time, dayOfWeek, moduleId, moduleName } = useSelector(state => state.shift)
+    const { 
+        date, 
+        time, 
+        dayOfWeek, 
+        moduleId, 
+        moduleName 
+    } = useSelector(state => state.shift)
 
     const isOpen = useSelector(state => state.modals.isOpen)
+    
     const style = modalStyles()
 
     const dispatch = useDispatch()
 
-    const back = () => dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
+    const handleReturn = () => dispatch(openModal('REGISTERED_STUDENTS_MODAL'))
 
     const componentRef = useRef()
-
 
     return (
         <Modal
@@ -117,7 +123,7 @@ const PrintRegStudentsModal = () => {
                     </Table>
                 </Main>
                 <Actions>
-                    <WarnButton onClick={() => back()}>Quay lại</WarnButton>
+                    <WarnButton onClick={() => handleReturn()}>Quay lại</WarnButton>
                     <ReactToPrint
                         trigger={() => (
                             <PrimaryButton>

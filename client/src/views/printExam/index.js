@@ -9,15 +9,30 @@ import { TitleWrapper, Container } from '../../components/table/style'
 import { PrimaryButton } from '../../components/button'
 import Icon from '../../components/icon'
 import ReactToPrint from "react-to-print";
+import { withCurrentUser } from '../../components/withCurrentUser';
+import { withRouter } from 'react-router-dom';
 
-const PrintExam = () => {
+const PrintExam = (props) => {
 
-    const studentId = useSelector(state => state.id)
+    const currentUser = props.currentUser
 
-    const { data, loading } = useQuery(getStudentShiftByStudentIdQuery, { variables: { studentId: studentId } });
-    const { data: user } = useQuery(getUserByIdQuery, { variables: { id: studentId } });
+    const { data, loading } = useQuery(getStudentShiftByStudentIdQuery, { variables: { studentId: currentUser.id } });
+    const { data: user } = useQuery(getUserByIdQuery, { variables: { id: currentUser.id } });
 
     const componentRef = useRef();
+
+    if (data && data.getStudentShiftByStudentId.length === 0) {
+        return (
+            <SingleColumnGrid>
+                <Container>
+                    <Main>
+                        <h1>Bạn chưa đăng kí ca thi nào</h1>
+                        <PrimaryButton onClick={() => props.history.push('/exams')}>Đăng kí ngay !!</PrimaryButton>
+                    </Main>
+                </Container>
+            </SingleColumnGrid>
+        )
+    }
 
     return (
         <SingleColumnGrid>
@@ -110,4 +125,4 @@ const PrintExam = () => {
     );
 };
 
-export default PrintExam;
+export default withCurrentUser(withRouter(PrintExam));

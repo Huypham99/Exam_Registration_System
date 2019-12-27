@@ -6,5 +6,9 @@ export default gql`
     name
     academyYear
     trainingSystem
+    openDate
+    openTime
+    endDate
+    endTime
   }
 `;

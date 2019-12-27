@@ -10,7 +10,7 @@ import 'react-table/react-table.css'
 
 const Table = (props) => {
 
-    const { data, isLoading, columns, title, api, createFunc, isExcel } = props;
+    const { data, isLoading, columns, title, api, createFunc, isExcel, isCreateNew } = props;
 
     return (
         <SingleColumnGrid>
@@ -19,9 +19,12 @@ const Table = (props) => {
                     <h1>{title}</h1>
                     <TitleActions>
                         {(isExcel && api) && <ExcelUploadForm api={api} />}
-                        <CreateButton>
-                            <PrimaryButton onClick={() => createFunc()}>Create New</PrimaryButton>
-                        </CreateButton>
+                        {
+                            isCreateNew &&
+                            <CreateButton>
+                                <PrimaryButton onClick={() => createFunc()}>Create New</PrimaryButton>
+                            </CreateButton>
+                        }
                     </TitleActions>
                 </TitleWrapper>
                 <Main>

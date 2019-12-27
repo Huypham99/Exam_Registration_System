@@ -16,15 +16,13 @@ const RegisteredStudentModal = (props) => {
     const studentId = useSelector(state => state.id)
     const students = useSelector(state => state.studentsList.list)
 
-    const { currentUser } = props
-
     const [selected, setSelected] = useState(false)
 
     const dispatch = useDispatch()
 
     const style = modalStyles();
 
-    const back = () => dispatch(openModal('HALL_LIST_MODAL'))
+    const handleReturn = () => dispatch(openModal('HALL_LIST_MODAL'))
     const handlePrint = () => dispatch(openModal('PRINT_REG_STUDENTS_MODAL'))
 
     return (
@@ -61,7 +59,7 @@ const RegisteredStudentModal = (props) => {
                     </Table>
                 </Wrapper>
                 <Actions>
-                    <WarnButton onClick={() => back()}>Quay lại</WarnButton>
+                    <WarnButton onClick={() => handleReturn()}>Quay lại</WarnButton>
                     <PrimaryButton onClick={() => handlePrint()}>Xuất danh sách</PrimaryButton>
                 </Actions>
             </ModalContainer>

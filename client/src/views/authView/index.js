@@ -9,7 +9,9 @@ const AuthView = ({ children }) => {
     const { loading, data } = useQuery(getCurrentUserQuery);
 
     if (data && data.getCurrentUser.id) return children(true);
+
     if (loading) return null;
+    
     return children(false);
 };
 

@@ -89,7 +89,8 @@ const IneligibleStudents = () => {
             isLoading={loading}
             columns={columns}
             isExcel={true}
-            title="Ineligible Students List"
+            isCreateNew={false}
+            title="Danh sách sinh viên không đủ điều kiện"
             api="excel/ineligible-students"
         />
     )

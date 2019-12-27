@@ -6,7 +6,7 @@ import { editHallMutation } from '../../../graphql/mutations/hall/editHall'
 import { useMutation } from '@apollo/react-hooks';
 import { modalStyles, Wrapper, Actions } from '../style'
 import ModalContainer from '../modalContainer'
-import { Input, Error } from '../../formElements/index'
+import { Input, Error } from '../../formElements'
 import { PrimaryButton, WarnButton } from '../../button/index'
 import { getAllHalls } from '../../../graphql/queries/hall/getHall'
 
@@ -18,6 +18,9 @@ const DeleteUserModal = () => {
 
     const { name, capacity } = useSelector(state => state.hall)
 
+    const roomName = name.split('-')[0]
+    const hallName = name.split('-')[1]
+
     const close = () => dispatch(closeModal());
 
     const style = modalStyles();
@@ -28,22 +31,35 @@ const DeleteUserModal = () => {
     );
 
     //handle input changes
-
-    const [inputName, setInputName] = useState(name)
+    const [inputRoomName, setInputRoomName] = useState(roomName)
+    const [inputHallName, setInputHallName] = useState(hallName)
     const [inputCapacity, setInputCapacity] = useState(capacity)
-    const [nameError, setNameError] = useState(false)
+
+    const [roomNameError, setRoomNameError] = useState(false)
+    const [hallNameError, setHallNameError] = useState(false)
     const [capacityError, setCapacityError] = useState(false)
     const [intergerError, setIntergerError] = useState(false)
 
-    const changeName = e => {
-        let name = e.target.value;
-        if (!name || name.length === 0) {
-            setInputName(name)
-            setNameError(true)
+    const changeRoomName = e => {
+        let roomName = e.target.value;
+        if (!roomName || roomName.length === 0) {
+            setInputRoomName(roomName)
+            setRoomNameError(true)
             return;
         }
-        setInputName(name)
-        setNameError(false)
+        setInputRoomName(name)
+        setRoomNameError(false)
+    };
+
+    const changeHallName = e => {
+        let hallName = e.target.value;
+        if (!hallName || hallName.length === 0) {
+            setInputHallName(hallName)
+            setHallNameError(true)
+            return;
+        }
+        setInputHallName(hallName)
+        setHallNameError(false)
     };
 
     const changeCapacity = e => {
@@ -53,13 +69,25 @@ const DeleteUserModal = () => {
             setCapacityError(true)
             return;
         }
+        if (isNaN(capacity)) {
+            setInputCapacity(capacity)
+            setIntergerError(true)
+            return
+        }
         setInputCapacity(capacity)
         setCapacityError(false)
+        setIntergerError(false)
     };
 
     const updateHall = async e => {
         e.preventDefault()
-        await editHall({ variables: { name: name, newName: inputName, newCapacity: parseInt(inputCapacity) } })
+        await editHall({
+            variables: {
+                name: name,
+                newName: `${inputRoomName}-${inputHallName}`,
+                newCapacity: parseInt(inputCapacity)
+            }
+        })
         dispatch(closeModal())
     }
 
@@ -77,12 +105,20 @@ const DeleteUserModal = () => {
                         {error && <Error>{error.graphQLErrors.map(err => err.message)}</Error>}
                         <Input
                             type="text"
-                            defaultValue={inputName}
-                            onChange={changeName}
+                            defaultValue={inputRoomName}
+                            onChange={changeRoomName}
                         >
-                            Tên giảng đường
+                            Tên phòng thi
                         </Input>
-                        {nameError ? <Error>Tên giảng đường không được để trống</Error> : ''}
+                        {roomNameError ? <Error>Tên phòng thi không được để trống</Error> : ''}
+                        <Input
+                            type="text"
+                            defaultValue={inputHallName}
+                            onChange={changeHallName}
+                        >
+                            Tên phòng thi
+                        </Input>
+                        {hallNameError ? <Error>Tên giảng đường không được để trống</Error> : ''}
                         <Input
                             type="text"
                             defaultValue={inputCapacity}
@@ -91,14 +127,15 @@ const DeleteUserModal = () => {
                             Sức chứa
                         </Input>
                         {capacityError ? <Error>Sức chứa không được để trống</Error> : ''}
+                        {intergerError ? <Error>Sức chứa phải là kiểu số</Error> : ''}
                     </Wrapper>
                     <Actions>
                         <WarnButton onClick={() => close()}>Hủy</WarnButton>
                         <PrimaryButton onClick={updateHall} disabled={
                             !inputCapacity ||
-                            !inputName ||
-                            inputName == name &&
-                            inputCapacity == capacity
+                            !inputRoomName ||
+                            !inputHallName ||
+                            `${inputRoomName}-${inputHallName}` == name && inputCapacity == capacity
                         }>{loading ? 'Cập nhật ...' : 'Cập nhật'}</PrimaryButton>
                     </Actions>
                 </form>

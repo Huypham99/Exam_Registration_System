@@ -24,8 +24,8 @@ const CreateModuleModal = () => {
         { refetchQueries: [{ query: getAllModulesQuery }] }
     );
 
-    const [inputName, setInputName] = useState('')
-    const [inputModuleId, setInputModuleId] = useState('')
+    const [inputName, setInputName] = useState(null)
+    const [inputModuleId, setInputModuleId] = useState(null)
     const [nameError, setNameError] = useState(false)
     const [moduleIdError, setModuleIdError] = useState(false)
 

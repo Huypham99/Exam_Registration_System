@@ -63,6 +63,14 @@ query ($studentId: Int){
 }
 `;
 
+export const getEligibleByStudentIdQuery = gql`
+query ($studentId: Int){
+    getEligibleByStudentId(studentId: $studentId){
+      moduleId
+    }
+}
+`;
+
 export const getEligibleStudents = gql`
 query {
     getEligibleStudents{

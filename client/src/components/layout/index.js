@@ -38,15 +38,6 @@ export const MEDIA_BREAK =
     }
   `;
   
-  /*
-  ┌──┬────────┬──┐
-  │  │   xx   │  │
-  │  │        │  │
-  │  │   xx   │  │
-  │  │        │  │
-  │  │   xx   │  │
-  └──┴────────┴──┘
-  */
   export const SingleColumnGrid = styled.div`
     display: grid;
     justify-self: center;

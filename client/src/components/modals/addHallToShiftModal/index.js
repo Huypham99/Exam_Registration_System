@@ -14,16 +14,18 @@ import { getAllHalls } from '../../../graphql/queries/hall/getHall'
 import { Table, Td, Th, Tr, IconWrapper } from '../selectShiftHallModal/style'
 import { Label } from '../../globals';
 import { removeDirectivesFromDocument } from 'apollo-utilities';
+import { getExamByIdQuery } from '../../../graphql/queries/exam/getExam'
+import { deleteShiftMutation } from '../../../graphql/mutations/shift/deleteShift'
 
 const AddHallModal = () => {
-    
+
     const style = modalStyles()
 
     const dispatch = useDispatch();
-    const close = () => dispatch(closeModal())
 
     const isOpen = useSelector(state => state.modals.isOpen)
     const shiftId = useSelector(state => state.shift.shiftId)
+    const examId = useSelector(state => state.exam.examId)
 
     const [hallIdList, setHallIdList] = useState([])
 
@@ -31,8 +33,19 @@ const AddHallModal = () => {
 
     // A mutation to add halls to a shift
     const [createShiftHall, { loading }] = useMutation(
-        createShiftHallMutation
+        createShiftHallMutation,
+        { refetchQueries: [{ query: getExamByIdQuery, variables: { id: examId } }] }
     )
+
+    const [deleteShift] = useMutation(
+        deleteShiftMutation,
+        { refetchQueries: [{ query: getExamByIdQuery, variables: { id: examId } }] }
+    )
+
+    const cancelAddHallToShift = async () => {
+        await deleteShift({ variables: { id: shiftId } })
+        dispatch(closeModal())
+    }
 
     // Concat hall's id to the array using spread operator
     const handleSelect = (hallId) => setHallIdList([...hallIdList, hallId])
@@ -89,11 +102,17 @@ const AddHallModal = () => {
                         </Table>
                     </Wrapper>
                     <Actions>
-                        <WarnButton onClick={() => close()}>Hủy</WarnButton>
-                        <PrimaryButton onClick={() => handleAddHall()}>{loading ? 'Hoàn tất...' : 'Hoàn tất'}</PrimaryButton>
+                        <WarnButton
+                            onClick={() => cancelAddHallToShift()}
+                        >Hủy</WarnButton>
+                        <PrimaryButton
+                            onClick={() => handleAddHall()}
+                            disabled={hallIdList.length == 0}
+                        >
+                            {loading ? 'Hoàn tất...' : 'Hoàn tất'}
+                        </PrimaryButton>
                     </Actions>
                 </ModalContainer>
-
             </Modal>
         </div>
     );

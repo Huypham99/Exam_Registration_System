@@ -65,6 +65,7 @@ const ModulesList = () => {
             isLoading={loading}
             columns={columns}
             title="Danh sách học phần"
+            isCreateNew={true}
             createFunc={() => createModule()}
         />
     )

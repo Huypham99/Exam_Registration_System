@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../shared/theme';
-import { fontStack } from '../../components/globals/index'
+import { fontStack, FlexRow } from '../../components/globals'
 import { Link } from 'react-router-dom';
 
 export const Main = styled.div`
@@ -20,10 +20,20 @@ export const ElementWrapper = styled.div`
     height: 100px;
     align-items: center;
     justify-content: space-between;
-    padding: 0 50px;
-    background: ${theme.brand.default}
-    border-radius: 5px;
+    margin: 20px 0;
+    padding: 0 30px;
+    background: ${theme.brand.default};
     color: ${theme.text.reverse};
+`
+
+export const Divider = styled.div`
+  height: 1px;
+  background: ${theme.bg.border};
+`;
+
+export const Flex = styled(FlexRow)`
+  align-items: center;
+  justify-content: space-evenly;
 `
 
 export const StyledLink = styled(Link)`
