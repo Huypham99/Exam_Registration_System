@@ -1,5 +1,5 @@
 const Module = require('../../models/module')
-const Capitalize = require('../../utils/inputFormat/capitalize')
+const inputHelper = require('../../utils/inputHelper')
 const { editModuleInputValidation } = require('../../utils/validation/module')
 
 module.exports = async (root, { input }, { user }) => {
@@ -10,7 +10,7 @@ module.exports = async (root, { input }, { user }) => {
 
     const { moduleId, newModuleId, newName } = input
 
-    let formatedName = Capitalize(newName)
+    let formatedName = inputHelper.capitalize(newName)
     let formatedModuleId = newModuleId.toUpperCase()
 
     if (moduleId !== formatedModuleId) {

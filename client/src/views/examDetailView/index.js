@@ -14,7 +14,7 @@ import { setShiftId, setShiftInfor } from '../../actions/shiftInfor'
 const ExamDetailStudent = (props) => {
 
     const id = props.match.params.examId;
-    
+
     const { loading, data } = useQuery(getExamByIdQuery, { variables: { id: id } });
 
     const style = TableCell;
@@ -67,21 +67,22 @@ const ExamDetailStudent = (props) => {
         {
             id: 'hall',
             Header: 'Phòng thi',
-            Cell: (props) => (
-                <PrimaryButton onClick={() => (
+            Cell: (props) => {
+                const { id, time, date, dayOfWeek, module: { moduleId, name } } = props.original
+                return <PrimaryButton onClick={() => (
                     dispatch(openModal('HALL_LIST_MODAL')),
                     dispatch(setShiftInfor(
-                        props.original.id,
-                        props.original.time,
-                        props.original.date,
-                        props.original.dayOfWeek,
-                        props.original.module.moduleId,
-                        props.original.module.name
+                        id,
+                        time,
+                        date,
+                        dayOfWeek,
+                        moduleId,
+                        name
                     ))
                 )}>
                     Xem
-                </PrimaryButton>
-            ),
+                </PrimaryButton >
+            },
             style: style,
             headerStyle: headerStyle,
             minWidth: 50,
@@ -92,6 +93,7 @@ const ExamDetailStudent = (props) => {
             data={data && data.getExamById.shifts}
             isLoading={loading}
             columns={columns}
+            isCreateNew={true}
             title={data && `${data.getExamById.name} năm học ${data.getExamById.academyYear} - ca thi`}
             createFunc={() => handleCreateShift()}
         />

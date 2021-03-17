@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const Compare = require('../../utils/password/comparision')
 const CheckExistingUser = require('../../utils/validation/existingUser')
-const CreateToken = require('../../utils/authentication/createToken')
+const jwtHelper = require('../../utils/jwtHelper')
 const validate = require('../../middleware/validation')
 const schemas = require('../../utils/validation/schemas')
 
@@ -12,14 +12,29 @@ loginRouter.post('/', validate(schemas.logIn), async (req, res, next) => {
         const { userName, password } = req.body
 
         let existingUser = await CheckExistingUser(userName)
-        if (!existingUser) res.status(422).json({ error: 'Sai tên đăng nhập hoặc mật khẩu' })
+        if (!existingUser) res.status(403).json({ error: 'Sai tên đăng nhập hoặc mật khẩu' })
 
         let validPassword = await Compare(password, existingUser.password)
-        if (!validPassword) res.status(422).json({ error: 'Sai tên đăng nhập hoặc mật khẩu' })
+        if (!validPassword) res.status(403).json({ error: 'Sai tên đăng nhập hoặc mật khẩu' })
 
-        let token = await CreateToken(existingUser.id)
+        const accessTokenLife = "1m";
 
-        await res.cookie('access_token', token, {
+        const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret";
+
+        const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
+
+        const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'refresh-token-secret'
+
+        const accessToken = jwtHelper.generateToken(existingUser.id, accessTokenSecret, accessTokenLife)
+
+        const refreshToken = jwtHelper.generateToken(existingUser.id, refreshTokenSecret, refreshTokenLife)
+
+        await res.cookie('access_token', accessToken, {
+            maxAge: 365 * 24 * 60 * 60 * 100,
+            httpOnly: true,
+        })
+       
+        await res.cookie('refresh_token', refreshToken, {
             maxAge: 365 * 24 * 60 * 60 * 100,
             httpOnly: true,
         })

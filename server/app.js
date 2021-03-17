@@ -15,6 +15,8 @@ const User = require('./models/user')
 const Student_Module = require('./models/student_module')
 const Encrypt = require('./utils/password/encryption')
 const ExistingUser = require('./utils/validation/existingUser')
+const jwtHelper = require('./utils/jwtHelper')
+const HallLoader = require('./loaders/hall')
 
 require('dotenv/config')
 
@@ -36,6 +38,8 @@ mongoose.connect(
 
 mongoose.set('useFindAndModify', false)
 
+mongoose.set('debug', true);
+
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB')
 })
@@ -53,28 +57,60 @@ app.use((error, req, res, next) => {
 })
 
 const server = new ApolloServer({
-    schema, context: ({ req, res }) => {
+    schema, context: async ({ req, res }) => {
 
-        const now = Date.now().valueOf() / 1000
+        const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret"
+
+        const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'refresh-token-secret'
+
+        const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "5m"
 
         const cookies = Cookies(req, res)
 
-        const token = cookies.get('access_token')
-        
-        if(!token) throw new Error('Please login !!')
+        const accessToken = cookies.get('access_token')
 
-        let decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const refreshToken = cookies.get('refresh_token')
 
-        if (typeof decoded.exp !== 'undefined' && decoded.exp < now) {
-            throw new Error(`token expired: ${JSON.stringify(decoded)}`)
-        }
-        if (typeof decoded.nbf !== 'undefined' && decoded.nbf > now) {
-            throw new Error(`token not yet valid: ${JSON.stringify(decoded)}`)
+        if (!accessToken || !refreshToken) {
+            return res.status(403).send({
+                message: 'No token provided.',
+            });
         }
 
-        let user = decoded.sub;
+        try {
+            const decoded = await jwtHelper.verifyToken(accessToken, accessTokenSecret);
 
-        return { req, res, user }
+            const user = decoded;
+
+            return {  hallLoader: HallLoader(), req, res, user }
+
+        } catch (error) {
+
+            try {
+
+                const result = await jwtHelper.generateNewToken(
+                    refreshToken,
+                    refreshTokenSecret,
+                    accessTokenSecret,
+                    accessTokenLife
+                )
+
+                await res.cookie('access_token', result.accessToken, {
+                    maxAge: 365 * 24 * 60 * 60 * 100,
+                    httpOnly: true,
+                })
+
+                const user = result.user
+
+                return {  hallLoader: HallLoader(), req, res, user }
+
+            } catch (error) {
+                res.status(403).json({
+                    message: error.message,
+                });
+            }
+
+        }
     }
 });
 

@@ -6,7 +6,7 @@ const createUserInputValidation = (data) => {
         name: Joi.string()
             .required(),
         password: Joi.string(),
-        email: Joi.email()
+        email: Joi.string()
             .required(),
         dob: Joi.string()
             .required(),
@@ -28,7 +28,7 @@ const editUserInputValidation = (data) => {
     const schema = {
         studentId: Joi.string()
             .required(),
-        email: Joi.email()
+        email: Joi.string()
             .required(),
         newName: Joi.string()
             .required(),

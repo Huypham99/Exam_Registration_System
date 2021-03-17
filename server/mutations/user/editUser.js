@@ -1,7 +1,7 @@
 const User = require('../../models/user')
 const ExistingUser = require('../../utils/validation/existingUser')
 const ExistingEmail = require('../../utils/validation/existingEmail')
-const FormatDate = require('../../utils/inputFormat/date')
+const inputHelper = require('../../utils/inputHelper')
 const { editUserInputValidation } = require('../../utils/validation/user')
 
 module.exports = async (root, { input }, { user }) => {
@@ -21,7 +21,7 @@ module.exports = async (root, { input }, { user }) => {
         newSchoolYear
     } = input
 
-    let formatedDob = FormatDate(newDob)
+    let formatedDob = inputHelper.formatDate(newDob)
 
     if (studentId !== newStudentId || email !== newEmail) {
         let existUser = await ExistingUser(newStudentId)

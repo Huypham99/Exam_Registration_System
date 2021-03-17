@@ -27,16 +27,17 @@ const ExamListStudent = ({ currentUser }) => {
                 </Flex>
                 <Divider />
                 {data && data.getAllExams.map(
-                    exam => (
-                        <div>
+                    exam => {
+                        const { id, name, academyYear, trainingSystem, openDate, openTime, endDate, endTime } = exam
+                        return <div>
                             <ElementWrapper>
-                                <StyledLink to={isAdmin ? `/exam/${exam.id}` : `/exam_registration/${exam.id}`}>
-                                    <h2>{`Kì thi  ${exam.name}  năm học  ${exam.academyYear}  hệ  ${exam.trainingSystem}`}</h2>
+                                <StyledLink to={isAdmin ? `/exam/${id}` : `/exam_registration/${id}`}>
+                                    <h2>{`Kì thi  ${name}  năm học  ${academyYear}  hệ  ${trainingSystem}`}</h2>
                                 </StyledLink>
-                                <p><b>Thời hạn đăng kí: </b>{`${exam.openTime}  ngày  ${exam.openDate}  đến  ${exam.endTime}  ngày  ${exam.endDate}`}</p>
+                                <p><b>Thời hạn đăng kí: </b>{`${openTime}  ngày  ${openDate}  đến  ${endTime}  ngày  ${endDate}`}</p>
                             </ElementWrapper>
                         </div>
-                    )
+                    }
                 )}
             </Main>
         </SingleColumnGrid>

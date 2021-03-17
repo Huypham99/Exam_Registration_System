@@ -13,12 +13,6 @@ query ($id: String){
           name
           moduleId
         }
-        halls{
-           hallDetail{
-            name
-            capacity
-          }
-        }
       }
     }
   }

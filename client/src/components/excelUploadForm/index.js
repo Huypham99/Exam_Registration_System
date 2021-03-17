@@ -26,10 +26,12 @@ const ExcelUploadForm = (props) => {
         setLoading(true)
 
         axios.post(`http://localhost:4000/${api}`, formData)
-            .then(res => res && setLoading(false))
-            .then(res => res && alert('Tải lên thành công, vui lòng tải lại trang !!'))
+            .then(res => res && res.data && (
+                alert('Tải lên thành công, vui lòng tải lại trang !!'),
+                setLoading(false)
+            ))
             .catch((error) => {
-                alert(error.response.data.error)
+                alert(error)
                 setDisplay(true)
                 setLoading(false)
             })

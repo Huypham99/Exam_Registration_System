@@ -1,7 +1,6 @@
 const Shift = require('../../models/shift')
-const FormatDate = require('../../utils/inputFormat/date')
-const FormatTime = require('../../utils/inputFormat/time')
-const createShiftInputValidation = require('../../utils/validation/shift')
+const inputHelper = require('../../utils/inputHelper')
+const { createShiftInputValidation } = require('../../utils/validation/shift')
 
 module.exports = async (root, { input }, { user }) => {
 
@@ -11,8 +10,8 @@ module.exports = async (root, { input }, { user }) => {
 
     const { time, date, dayOfWeek, examId, moduleId } = input;
 
-    let formatedTime = FormatTime(time);
-    let formatedDate = FormatDate(date);
+    let formatedTime = inputHelper.formatTime(time);
+    let formatedDate = inputHelper.formatDate(date);
 
     const shift = await new Shift({
         time: formatedTime,
@@ -23,5 +22,5 @@ module.exports = async (root, { input }, { user }) => {
     })
 
     return shift.save()
-    
+
 }

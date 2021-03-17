@@ -19,14 +19,14 @@ uploadIneligibleStudentsRouter.post('/', upload.single('file'), (req, res, next)
             .on('data', (row) => {
                 results.push(row)
             })
-            .on('end', () => {
-                results.map(async data => {
+            .on('end', async () => {
+                await results.map(async data => {
 
-                    let existingStudentModule = Student_Module.find({ studentId: data['Mã số sinh viên'], moduleId: data['Mã học phần'], isEligible: false })
+                    // let existingStudentModule = Student_Module.findOne({ studentId: data['Mã số sinh viên'], moduleId: data['Mã học phần'], isEligible: false })
 
-                    if (existingStudentModule) {
-                        res.status(422).json({ error: `Dữ liệu tải lên bị trùng` })
-                    } else {
+                    // if (existingStudentModule) {
+                    //     res.status(422).json({ error: `Dữ liệu tải lên bị trùng` })
+                    // } else {
 
                         const studentModule = await new Student_Module({
                             studentId: data['Mã số sinh viên'],
@@ -34,10 +34,11 @@ uploadIneligibleStudentsRouter.post('/', upload.single('file'), (req, res, next)
                             isEligible: false
                         })
 
-                        return studentModule.save()
-                    }
-
+                        studentModule.save()
                 })
+
+                res.send('Tải lên thành công')
+
                 fs.unlink(`${req.file.path}`, function (err) {
                     if (err) return console.log(err);
                     console.log('file deleted successfully');

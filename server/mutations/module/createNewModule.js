@@ -1,5 +1,5 @@
 const Module = require('../../models/module')
-const Capitalize = require('../../utils/inputFormat/capitalize')
+const inputHelper = require('../../utils/inputHelper')
 const { createModuleInputValidation } = require('../../utils/validation/module')
 
 module.exports = async (root, { input }, { user }) => {
@@ -10,7 +10,7 @@ module.exports = async (root, { input }, { user }) => {
 
     const { name, moduleId } = input
 
-    let newName = Capitalize(name)
+    let newName = inputHelper.capitalize(name)
     let newModuleId = moduleId.toUpperCase()
 
     const existModule = await Module.findOne({ moduleId: moduleId })

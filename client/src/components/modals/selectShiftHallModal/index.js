@@ -42,8 +42,6 @@ const SelectShiftHallModal = (props) => {
         { variables: { id: id } }
     )
 
-    const hallsOfShift = shift && shift.getShiftById.halls
-
     const { data: student_shift, loading: student_shift_loading } = useQuery(
         getStudentShiftByStudentIdQuery,
         { variables: { studentId: currentUser.id } }
@@ -139,7 +137,7 @@ const SelectShiftHallModal = (props) => {
                                 <Th>Chọn</Th>
                             </tr>
                         </thead>
-                        {hallsOfShift.map(shiftHall => (
+                        {shift && shift.getShiftById.halls.map(shiftHall => (
 
                             <Query query={getRegisterStudentsQuery} variables={{ shiftHallId: shiftHall.id }}>
                                 {({ data }) => {

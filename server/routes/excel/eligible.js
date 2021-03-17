@@ -10,23 +10,17 @@ const uploadEligibleStudentsRouter = Router();
 
 uploadEligibleStudentsRouter.post('/', upload.single('file'), (req, res, next) => {
 
-    let results = []
+    try {
+        let results = []
 
-    fs.createReadStream(req.file.path)
-        .pipe(parse({ columns: function (e) { return e } }))
-        .on('data', (row) => {
-            results.push(row)
-        })
-        .on('end', () => {
-            results.map(async data => {
+        fs.createReadStream(req.file.path)
+            .pipe(parse({ columns: function (e) { return e } }))
+            .on('data', (row) => {
+                results.push(row)
+            })
+            .on('end', async () => {
+                await results.map(async data => {
 
-                let existingStudentModule = Student_Module.findOne({ studentId: data['Mã số sinh viên'], moduleId: data['Mã học phần'], isEligible: true })
-
-                console.log(existingStudentModule)
-
-                // if (existingStudentModule) {
-                //     res.status(422).json({ error: `Dữ liệu tải lên bị trùng` })
-                // } else {
                     const studentModule = await new Student_Module({
                         studentId: data['Mã số sinh viên'],
                         moduleId: data['Mã học phần'],
@@ -34,15 +28,18 @@ uploadEligibleStudentsRouter.post('/', upload.single('file'), (req, res, next) =
                     })
 
                     studentModule.save()
+                })
 
-                    res.send(studentModule)
-                
+                res.send('Tải lên thành công')
+
+                fs.unlink(`${req.file.path}`, function (err) {
+                    if (err) return console.log(err);
+                    console.log('file deleted successfully');
+                })
             })
-            fs.unlink(`${req.file.path}`, function (err) {
-                if (err) return console.log(err);
-                console.log('file deleted successfully');
-            })
-        })
+    } catch (error) {
+        return next(error)
+    }
 
 
 })

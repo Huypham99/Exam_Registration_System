@@ -1,7 +1,7 @@
 const User = require('../../models/user')
 const Encrypt = require('../../utils/password/encryption')
 const ExistingUser = require('../../utils/validation/existingUser')
-const FormatDate = require('../../utils/inputFormat/date')
+const inputHelper = require('../../utils/inputHelper')
 const { createUserInputValidation } = require('../../utils/validation/user')
 
 module.exports = async (root, { input }, { user }) => {
@@ -15,7 +15,7 @@ module.exports = async (root, { input }, { user }) => {
     let existUser = await ExistingUser(studentId)
     if (existUser) throw new Error('Sinh viên đã tồn tại !!')
 
-    let formatedDob = FormatDate(dob)
+    let formatedDob = inputHelper.formatDate(dob)
 
     encryptPassword = await Encrypt(password);
 

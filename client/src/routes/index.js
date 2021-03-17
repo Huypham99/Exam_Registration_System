@@ -67,12 +67,12 @@ const Routes = () => {
                         <ViewGrid>
                             <ModalRoot />
                             <Route path='/dashboard' exact component={isAdmin ? AdminDashboardFallback : UserDashboardFallback} />
-                            <Route path='/print' component={!isAdmin ? PrintExamFallback : () => <Redirect to='/login' />} />
-                            <Route path='/students' component={isAdmin ? StudentsListFallback : () => <Redirect to='/login' />} />
-                            <Route path='/modules' component={isAdmin ? ModulesListFallback : () => <Redirect to='/login' />} />
-                            <Route path='/ineligible' component={isAdmin ? IneligibleStudentsFallback : () => <Redirect to='/login' />} />
-                            <Route path='/eligible' component={isAdmin ? EligibleStudentsFallback : () => <Redirect to='/login' />} />
-                            <Route path='/halls' component={isAdmin ? HallsListFallback : () => <Redirect to='/login' />} />
+                            <Route path='/print' component={!isAdmin ? PrintExamFallback : LogInFallback} />
+                            <Route path='/students' component={isAdmin ? StudentsListFallback : LogInFallback} />
+                            <Route path='/modules' component={isAdmin ? ModulesListFallback : LogInFallback} />
+                            <Route path='/ineligible' component={isAdmin ? IneligibleStudentsFallback : LogInFallback} />
+                            <Route path='/eligible' component={isAdmin ? EligibleStudentsFallback : LogInFallback} />
+                            <Route path='/halls' component={isAdmin ? HallsListFallback : LogInFallback} />
                             <Route path='/exams' component={ExamListViewFallback} />
                             <Route path='/exam/:examId' component={ExamDetailViewFallback} />
                             <Route path='/exam_registration/:examId' component={ExamRegistrationViewFallback} />
